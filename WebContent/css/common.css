@@ -1,0 +1,37 @@
+
+body{
+	margin:0;
+}
+.header div a span{
+	color:#E79550;
+	font-weight: bold;
+}
+.header{
+	background-color: #393332;
+	overflow: auto;
+	margin:0%;
+	padding: 0%;
+}
+.footer{
+	width: 100%;
+	text-align: center;
+	vertical-align: middle;
+}
+.footer div{
+	overflow: auto;
+	font-size: 1vw;
+}
+.footer div p{
+	padding: 0.5vw 0;
+}
+.footer .WarningSign{
+	background-color:#E79550;
+}
+.footer .copyright{
+	background-color:#393332;
+}
+
+.positionFix {
+	position: fixed;
+	bottom: 0;
+}
