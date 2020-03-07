@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import model.Common;
 import model.PO;
 import model.PODetail;
+import model.POStatus;
 import model.Users;
 import model.Wine;
 import util.CommonUtil;
@@ -18,15 +19,14 @@ import util.DBConn;
 import util.DateUtil;
 
 public class PODao {
-	String sql;
-	String sqlPO;
-	String sqlPD;
-	String tablePO = "PO";
-	String tablePD = "PODetail";
-	boolean b;
-	CommonUtil comm = new CommonUtil();
-	DateUtil date = new DateUtil();
-	static Connection conn = DBConn.getConn();
+	static String sql,sqlPO,sqlPD,sqlPS;
+	static final String tablePO = "PO";
+	static final String tablePD = "PODetail";
+	static final String tablePS = "POStatus";
+	static boolean b;
+	static final CommonUtil comm = new CommonUtil();
+	static final DateUtil date = new DateUtil();
+	static final Connection conn = DBConn.getConn();
 	static PreparedStatement ps = null;
 	static ResultSet rs = null;
 
@@ -41,6 +41,7 @@ public class PODao {
 		}
 
 		sqlPD = "insert into " + tablePD + " values(?,?,?,?,?,?)";
+		sqlPS = "insert into " + tablePS + " values(?,?,?,sysdate())";
 
 		try {
 			if (common.getAction().equals("add")) {
@@ -79,6 +80,20 @@ public class PODao {
 				ps.setInt(6, detail.getSubtotal());
 				b = ps.executeUpdate() > 0;
 			}
+			
+			ArrayList<POStatus> posList = new POStatusDao().query(po.getId(),"final");
+			String oldStatus = "";
+			for(POStatus oldpos : posList) {
+				oldStatus = oldpos.getPoStatus();
+			}
+			if(!oldStatus.equals(po.getStatus())) {
+				ps = conn.prepareStatement(sqlPS);
+				ps.setString(1, po.getId());
+				ps.setNString(2, po.getStatus());
+				ps.setString(3, po.getUpdateUser());
+				b = ps.executeUpdate() > 0;
+			}
+			
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
@@ -108,7 +123,7 @@ public class PODao {
 	 * @return
 	 */
 	public ArrayList<PO> query(PO po) {
-		sqlPO = "select id,total,owner,status,createUser,createTime,updateUser,updateTime from " + tablePO + " where 1=1";
+		sqlPO = "select * from " + tablePO + " where 1=1";
 		boolean poIsNotNull = po != null && !comm.getString(po.getId()).equals("");
 		
 		//進入訂單明細頁所需
@@ -151,6 +166,8 @@ public class PODao {
 				rsPo.setTotal(rs.getInt("total"));
 				rsPo.setOwner(rs.getString("owner"));
 				rsPo.setStatus(rs.getString("status"));
+				rsPo.setFreightId(rs.getString("freightid"));
+				rsPo.setFreightName(rs.getString("freightname"));
 				rsPo.setCreateUser(rs.getString("createUser"));
 				rsPo.setCreateTime(rs.getString("createTime"));
 				rsPo.setUpdateUser(rs.getString("updateUser"));
@@ -191,7 +208,7 @@ public class PODao {
 
 		return arr;
 	}
-
+	
 	/**
 	 * 取po的id
 	 * 

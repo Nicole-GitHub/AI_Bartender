@@ -25,8 +25,6 @@
 		po.setId(id);
 		poList = dao.query(po);
 	}
-	String now = new DateUtil().getNowDateTimeFormat("yyyy-MM-dd HH:mm:ss");
-	
 	//System.out.println(pageNum);
 %>
 <c:set var="action" value="<%=action %>" />
@@ -49,6 +47,7 @@
 					<tr>
 						<td>
 							<label>訂單狀態：</label>
+							<input type="hidden" id="oldStatus" name="oldStatus" value="${poList[0].status}">
 							<select id="status" name="status">
 								<option value="">=== 請選擇 ===</option>
 								<option value="等待專員聯繫" ${poList[0].status eq '等待專員聯繫' ? 'selected' : '' }>等待專員聯繫</option>
@@ -67,11 +66,11 @@
 					</tr>
 					<tr>
 						<td>
-							<label>物流編號：${poList[0].freightId }</label>
+							<label>物流編號：</label>
 							<input type="text" id="freightId" name="freightId" value="${empty poList[0].freightId ? '' : poList[0].freightId}">
 						</td>
 						<td>
-							<label>貨運商名稱：${poList[0].freightName }</label>
+							<label>貨運商名稱：</label>
 							<input type="text" id="freightName" name="freightName" value="${empty poList[0].freightName ? '' : poList[0].freightName}">
 						</td>
 					</tr>

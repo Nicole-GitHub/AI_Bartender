@@ -5,19 +5,46 @@ $(document).ready(function() {
 		resize();
     });
     
-    //新增明細項目
-    //.clone(true)才能讓clone出來的子元素也能有event功能
+    // 新增明細項目
+    // .clone(true)才能讓clone出來的子元素也能有event功能
     $("#addDetail").click(function(){
         $('.qTable').append($("#tempRow").clone(true).removeAttr("id").css("display","table-row"));
         resize();
     });
 
-    //存放wineId的舊值
+    // 存放status的舊值
+    var oldStatus ;
+    $("#status").focus(function(){
+    	oldStatus = $(this).val();
+    })
+    // 判斷狀態變更是否正確
+    $("#status").change(function(){
+    	var oldDBStatus = $("#oldStatus").val();
+    	var status = $(this).val();
+    	var o = 0;
+    	var n = 0;
+    	var statusList = ["","等待專員聯繫","訂購成功","撿貨中","理貨中","已出貨","已完成","已取消"];
+    	$.each(statusList, function(index,val) {
+    		if(oldDBStatus == val) o = index;
+    		if(status == val) n = index;
+    		console.log('val='+val+",index="+index);
+    	}); 
+
+		if(n < o){
+			alert("訂單狀態設定錯誤");
+        	$(this).val(oldStatus);
+			return false;
+        }else{
+        	oldStatus = status;
+        }
+    });
+    
+    // 存放wineId的舊值
     var oldWineId ;
     $("select[name=wineId]").focus(function(){
     	oldWineId = $(this).val();
     })
-    //選好商品後系統自動帶入價格並算出小計
+    // 選好商品後系統自動帶入價格並算出小計
     $("select[name=wineId]").change(function(){
         var wineId = $(this).val();
         if(wineId == ""){
@@ -40,12 +67,12 @@ $(document).ready(function() {
         setSubTotal(tr,price,1);
     });
 
-    //存放quantity的舊值
+    // 存放quantity的舊值
     var oldquantity ;
     $("input[name=quantity]").focus(function(){
     	oldquantity = $(this).val();
     })
-    //數量填好後自動算出小計
+    // 數量填好後自動算出小計
     $("input[name=quantity]").change(function(){
         var tr = $(this).parents("tr");
         var quantity = $(this).val();
@@ -59,7 +86,7 @@ $(document).ready(function() {
         var price = tr.find("input[name=price]").val();
         setSubTotal(tr,price,quantity);
     });
-    //刪除明細項目 
+    // 刪除明細項目
     $("input[name=delete]").click(function(){
     	var c = 0;
     	$(this).parents("table").find("tr").each(function(){
@@ -74,19 +101,19 @@ $(document).ready(function() {
         }
     });
     
-    //確定新增
+    // 確定新增
 	$("#add").click(function() {
 		if(validate($("#owner").val(),"訂購人") && validate($("#status").val(),"訂單狀態")){
 			add();
 		}
     });
 	
-	//取消
+	// 取消
 	$("#cancel").click(function(){
 		goSearchPage();
 	})
 
-    //自動記算小計
+    // 自動記算小計
     function setSubTotal(tr,price,quantity){
         var subtotalInp = tr.find("input[name=subtotal]");
         var subtotalTd = subtotalInp.parent();
@@ -96,7 +123,7 @@ $(document).ready(function() {
         setTotal();
     }
 	
-	//自動計算總金額
+	// 自動計算總金額
 	function setTotal(){
         var total = 0;
         $("input[name=subtotal]").each(function(){
@@ -114,7 +141,7 @@ $(document).ready(function() {
 		windowResize(bodyw);
     }
 
-    //判斷陣列內的值是否有重複
+    // 判斷訂單明細內的商品名稱陣列內的值是否有重複
     Array.prototype.Contains = function(element) {
         for (var i = 0; i < this.length; i++) {
             if (this[i] == element) {
@@ -143,13 +170,13 @@ $(document).ready(function() {
         var orginValue = [];
         var duplicate = false;
         $("select[name=wineId]").each(function(){
-        	//跳過第一個tempRow
+        	// 跳過第一個tempRow
         	if($(this).parents("tr").attr("id") == "tempRow"){
         		return true;
         	}
         	var value = $(this).val();
         	if(orginValue.Contains(value)){
-        		alert("商品名稱重複或空值");
+        		alert("商品名稱重複");
         		duplicate = true;
         		return false;
         	}
@@ -188,7 +215,7 @@ $(document).ready(function() {
         }
     }
     
-    //回到查詢頁
+    // 回到查詢頁
     function goSearchPage(){
 		location.href="PO.jsp";
     }

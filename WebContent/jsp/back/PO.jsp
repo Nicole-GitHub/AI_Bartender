@@ -90,8 +90,16 @@
 						<td>${po.status}</td>
 						<td>${po.total}</td>
 						<td>${po.createTime}</td>
-						<td><input type="button" value="修改" name="update" uuid="${po.id}"></td>
-						<td><input type="button" value="取消訂購" name="del"	uuid="${po.id}"></td>
+						<c:choose>
+							<c:when test="${po.status eq '已取消'}">
+								<td></td>
+								<td></td>
+							</c:when>
+							<c:otherwise>
+								<td><input type="button" value="修改" name="update" uuid="${po.id}"></td>
+								<td><input type="button" value="取消訂購" name="del"	uuid="${po.id}"></td>
+							</c:otherwise>
+						</c:choose>
 					</tr>
 				</c:if>
 			</c:forEach>

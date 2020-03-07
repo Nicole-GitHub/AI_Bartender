@@ -3,16 +3,16 @@ package model;
 import java.util.Date;
 
 public class POStatus {
-	private Integer poId;
+	private String poId;
 	private String poStatus;
 	private String updateUser;
-	private Date updateTime;
+	private String updateTime;
 
-	public Integer getPoId() {
+	public String getPoId() {
 		return poId;
 	}
 
-	public void setPoId(Integer poId) {
+	public void setPoId(String poId) {
 		this.poId = poId;
 	}
 
@@ -32,11 +32,11 @@ public class POStatus {
 		this.updateUser = updateUser;
 	}
 
-	public Date getUpdateTime() {
+	public String getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Date updateTime) {
+	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
 
