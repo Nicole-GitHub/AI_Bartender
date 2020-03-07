@@ -34,11 +34,13 @@ public class PODao {
 
 		if (common.getAction().equals("add")) {
 			sqlPO = "insert into " + tablePO + " values(?,?,?,?,?,?,?,sysdate(),?,sysdate())";
-			sqlPD = "insert into " + tablePD + " values(?,?,?,?,?,?)";
 		} else {
-			sqlPO = "update " + tablePO + " set total = ? , status = ? , updateUser = ? where id = ? ";
-			sqlPD = "update " + tablePO + " set total = ? , status = ? , updateUser = ? where id = ? ";
+			sqlPO = "update " + tablePO + " set total = ? , status = ? , freightId = ? , freightName = ? ,"
+					+ " updateUser = ? , updateTime = sysdate() where id = ? ";
+			sql = "delete from " + tablePD + " where poid = ? ";
 		}
+
+		sqlPD = "insert into " + tablePD + " values(?,?,?,?,?,?)";
 
 		try {
 			if (common.getAction().equals("add")) {
@@ -52,22 +54,29 @@ public class PODao {
 				ps.setString(7, po.getCreateUser());
 				ps.setString(8, po.getUpdateUser());
 				b = ps.executeUpdate() > 0;
-				for (PODetail detail : po.getPoDetail()) {
-					ps = conn.prepareStatement(sqlPD);
-					ps.setString(1, detail.getPoId());
-					ps.setString(2, detail.getWineId());
-					ps.setInt(3, detail.getPrice());
-					ps.setNString(4, detail.getUnit());
-					ps.setInt(5, detail.getQuantity());
-					ps.setInt(6, detail.getSubtotal());
-					b = ps.executeUpdate() > 0;
-				}
 			} else if (common.getAction().equals("update")) {
 				ps = conn.prepareStatement(sqlPO);
 				ps.setInt(1, po.getTotal());
-				ps.setString(2, po.getStatus());
-				ps.setString(3, po.getUpdateUser());
-				ps.setString(4, po.getId());
+				ps.setNString(2, po.getStatus());
+				ps.setString(3, po.getFreightId());
+				ps.setNString(4, po.getFreightName());
+				ps.setString(5, po.getUpdateUser());
+				ps.setString(6, po.getId());
+				b = ps.executeUpdate() > 0;
+
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, po.getId());
+				b = ps.executeUpdate() > 0;
+			}
+
+			for (PODetail detail : po.getPoDetail()) {
+				ps = conn.prepareStatement(sqlPD);
+				ps.setString(1, detail.getPoId());
+				ps.setString(2, detail.getWineId());
+				ps.setInt(3, detail.getPrice());
+				ps.setNString(4, detail.getUnit());
+				ps.setInt(5, detail.getQuantity());
+				ps.setInt(6, detail.getSubtotal());
 				b = ps.executeUpdate() > 0;
 			}
 		} catch (SQLException e) {
@@ -77,12 +86,13 @@ public class PODao {
 		return b;
 	}
 
-	public boolean del(PO po) {
-		sqlPO = "delete from " + tablePO + " where id = ? ";
+	public boolean del(String id) {
+		sqlPO = "update " + tablePO + " set status = ? where id = ? ";
 
 		try {
 			ps = conn.prepareStatement(sqlPO);
-			ps.setString(1, po.getId());
+			ps.setNString(1, "已取消");
+			ps.setString(2, id);
 			b = ps.executeUpdate() > 0;
 		} catch (SQLException e) {
 			System.out.println(e);

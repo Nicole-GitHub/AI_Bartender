@@ -15,41 +15,87 @@
 	String id = comm.getString(request.getParameter("id"));
 	int pageNum = comm.StringToInt(request.getParameter("pageNum"));
 	if(pageNum < 0) pageNum = 0;
-	id = id.equals("") ? dao.getId() : id;
+	String action = id.equals("") ? "新增" : "修改";
+	
+	ArrayList<PO> poList = new ArrayList<PO>();
+	if(id.equals("")){
+		id = dao.getId();
+	}else{
+		PO po = new PO();
+		po.setId(id);
+		poList = dao.query(po);
+	}
 	String now = new DateUtil().getNowDateTimeFormat("yyyy-MM-dd HH:mm:ss");
+	
 	//System.out.println(pageNum);
 %>
+<c:set var="action" value="<%=action %>" />
+<c:set var="id" value="<%=id %>" />
+<c:set var="poList" value="<%=poList %>" />
 <div class="body">
 	<form id="form" action="../../POServlet" method="post">
-	<input type="hidden" id="action" name="action" value="add"/>
+	<input type="hidden" id="action" name="action" value="${action eq '新增' ? 'add' : 'update'}"/>
 		<div>
-			<div><h1><b>訂單新增</b></h1></div>
+			<div><h1><b>訂單${action }</b></h1></div>
 			<div>
 				<table class="titleTable">
 					<tr>
 						<td>
-							<label>訂單編號：<%=id %></label>
-							<input type="hidden" id="id" name="id" value="<%=id %>"/>
+							<label>訂單編號：${empty poList[0].id ? id : poList[0].id}</label>
+							<input type="hidden" id="id" name="id" value="${empty poList[0].id ? id : poList[0].id}"/>
 						</td>
+					</tr>
 						
+					<tr>
 						<td>
-							<label>訂單總金額：<span>0</span></label>
-							<input type="hidden" id="total" name="total" value="0"/>
+							<label>訂單狀態：</label>
+							<select id="status" name="status">
+								<option value="">=== 請選擇 ===</option>
+								<option value="等待專員聯繫" ${poList[0].status eq '等待專員聯繫' ? 'selected' : '' }>等待專員聯繫</option>
+								<option value="訂購成功" ${poList[0].status eq '訂購成功' ? 'selected' : '' }>訂購成功</option>
+								<option value="撿貨中" ${poList[0].status eq '撿貨中' ? 'selected' : '' }>撿貨中</option>
+								<option value="理貨中" ${poList[0].status eq '理貨中' ? 'selected' : '' }>理貨中</option>
+								<option value="已出貨" ${poList[0].status eq '已出貨' ? 'selected' : '' }>已出貨</option>
+								<option value="已完成" ${poList[0].status eq '已完成' ? 'selected' : '' }>已完成</option>
+								<option value="已取消" ${poList[0].status eq '已取消' ? 'selected' : '' }>已取消</option>
+							</select>
+						</td>
+						<td>
+							<label>訂單總金額：<span>${empty poList[0].total ? 0 : poList[0].total}</span></label>
+							<input type="hidden" id="total" name="total" value="${empty poList[0].total ? 0 : poList[0].total}"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<label>訂購人：</label>
-							<select id="owner" name="owner">
-								<option value="">=== 請選擇 ===</option>
-								<c:forEach items="<%=dao.getUsersList() %>" var="user">
-									<option value="${user.email}">${user.email}</option>
-								</c:forEach>
-							</select>
+							<label>物流編號：${poList[0].freightId }</label>
+							<input type="text" id="freightId" name="freightId" value="${empty poList[0].freightId ? '' : poList[0].freightId}">
 						</td>
 						<td>
-							<label>建立人員： admin</label>
-							<input type="hidden" id="createUser" name="createUser" value="admin">
+							<label>貨運商名稱：${poList[0].freightName }</label>
+							<input type="text" id="freightName" name="freightName" value="${empty poList[0].freightName ? '' : poList[0].freightName}">
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							<label>訂購人：</label>
+							<c:choose >
+							 <c:when test="${empty poList[0].owner}">
+								<select id="owner" name="owner">
+									<option value="">=== 請選擇 ===</option>
+									<c:forEach items="<%=dao.getUsersList() %>" var="user">
+										<option value="${user.email}" ${poList[0].owner eq user.email ? "selected" : ""}>${user.name} (${user.email})</option>
+									</c:forEach>
+								</select>
+							 </c:when>
+							 <c:otherwise>
+							 	<input type="hidden" id="owner" name="owner" value="${poList[0].owner}" >${poList[0].owner}
+							 </c:otherwise>
+							</c:choose>
+						</td>
+						<td>
+							<label>${action }人員： admin</label>
+							<input type="hidden" id="${action eq '新增' ? 'createUser' : 'updateUser' }" name="${action eq '新增' ? 'createUser' : 'updateUser' }" value="admin">
 						</td>
 					</tr>
 				</table><!--queryForm !-->
@@ -79,24 +125,47 @@
 					<td><input type="hidden" name="price" value="0"><span>0</span></td>
 					<td><input type="number" name="quantity" value="0" min="0" max="999"></td>
 					<td><input type="hidden" name="unit" value="瓶"><span>瓶</span></td>
-					<td><input type="hidden" name="subtotal" ><span>0</span></td>
+					<td><input type="hidden" name="subtotal" value="0"><span>0</span></td>
 					<td><input type="button" value="刪除" name="delete"></td>
 	    		</tr>
-				<tr>
-					<td>
-						<select name="wineId">
-							<option value="">請選擇</option>
-							<c:forEach items="<%=dao.getWineList() %>" var="wine">
-								<option value="${wine.id}" price="${wine.price}">${wine.id} ${wine.chName }</option>
-							</c:forEach>
-						</select>
-					</td>
-					<td><input type="hidden" name="price" value="0"><span>0</span></td>
-					<td><input type="number" name="quantity" value="0" min="0" max="999"></td>
-					<td><input type="hidden" name="unit" value="瓶"><span>瓶</span></td>
-					<td><input type="hidden" name="subtotal" ><span>0</span></td>
-					<td><input type="button" value="刪除" name="delete"></td>
-				</tr>
+	    		<c:choose>
+					<c:when test="${empty poList[0].id}">
+						<tr>
+							<td>
+								<select name="wineId">
+									<option value="">請選擇</option>
+									<c:forEach items="<%=dao.getWineList() %>" var="wine">
+										<option value="${wine.id}" price="${wine.price}">${wine.id} ${wine.chName }</option>
+									</c:forEach>
+								</select>
+							</td>
+							<td><input type="hidden" name="price" value="0"><span>0</span></td>
+							<td><input type="number" name="quantity" value="0" min="0" max="999"></td>
+							<td><input type="hidden" name="unit" value="瓶"><span>瓶</span></td>
+							<td><input type="hidden" name="subtotal" value="0" ><span>0</span></td>
+							<td><input type="button" value="刪除" name="delete"></td>
+						</tr>
+					</c:when>
+					<c:otherwise>
+			    		<c:forEach items="${poList[0].poDetail}" var="detail">
+							<tr>
+								<td>
+									<select name="wineId">
+										<option value="">請選擇</option>
+										<c:forEach items="<%=dao.getWineList() %>" var="wine">
+											<option value="${wine.id}" price="${wine.price}" ${detail.wineId eq wine.id ? "selected" : "" }>${wine.id} ${wine.chName }</option>
+										</c:forEach>
+									</select>
+								</td>
+								<td><input type="hidden" name="price" value="${detail.price }"><span>${detail.price }</span></td>
+								<td><input type="number" name="quantity" value="${detail.quantity }" min="0" max="999"></td>
+								<td><input type="hidden" name="unit" value="${detail.unit }"><span>${detail.unit }</span></td>
+								<td><input type="hidden" name="subtotal" value="${detail.subtotal }"><span>${detail.subtotal }</span></td>
+								<td><input type="button" value="刪除" name="delete"></td>
+							</tr>
+			    		</c:forEach>
+					</c:otherwise>
+	    		</c:choose>
 			</table>
 		</div>
 		

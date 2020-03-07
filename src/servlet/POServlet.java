@@ -63,38 +63,21 @@ public class POServlet extends HttpServlet {
         Gson g=new Gson();
 		PODao dao = new PODao();
 		System.out.println(request.getParameter("po"));
-        PO po = g.fromJson(request.getParameter("po"), PO.class);
         Common common = g.fromJson(request.getParameter("common"), Common.class);
-        Json2Entity(po);
+        String id = comm.getString(request.getParameter("id"));
         Json2Entity(common);
 		boolean b = false;
 		
-		if (common.getAction().equals("del") && !comm.isBlank(po.getId())) {
-			b = dao.del(po);
+		if (common.getAction().equals("del") && !comm.isBlank(id)) {
+			b = dao.del(id);
 		}else if(!common.getAction().equals("del")) {
-//		else if (common.getAction().equals("update")||common.getAction().equals("add")) {
-//			po.setAction(id.equals("") ? "add" : "update");
-//			po.setTotal(total);
-//			po.setStatus(status);
-//			po.setUpdateUser(memberId);
-//			po.setUpdateTime(new Date().toString());
-
-//			if (common.getAction().equals("add")) {
-//				po.setId(dao.getId());
-//				po.setOwner(memberId);
-//				po.setCreateUser(memberId);
-//				po.setCreateTime(new Date().toString());
-//			}
-//			else {
-//				po.setId(id);
-//			}
-
+	        PO po = g.fromJson(request.getParameter("po"), PO.class);
+	        Json2Entity(po);
 			b = dao.update(po,common);
-
-			response.getWriter().print("ok");
 		}else {
 			System.out.println("Error: 刪除時id不可為空");
 		}
+		if(b) response.getWriter().print("ok");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -12,26 +12,53 @@ $(document).ready(function() {
         resize();
     });
 
+    //存放wineId的舊值
+    var oldWineId ;
+    $("select[name=wineId]").focus(function(){
+    	oldWineId = $(this).val();
+    })
     //選好商品後系統自動帶入價格並算出小計
     $("select[name=wineId]").change(function(){
+        var wineId = $(this).val();
+        if(wineId == ""){
+        	alert("商品名稱不可為空");
+        	$(this).val(oldWineId);
+    		return false;
+        }else{
+        	oldWineId = wineId;
+        }
         var price = $(this).find("option:selected").attr("price");
         var tr = $(this).parents("tr");
         var priceInp = tr.find("input[name=price]");
         var priceTd = priceInp.parent();
-        var quantity = tr.find("input[name=quantity]").val();
+        var quantityInp = tr.find("input[name=quantity]");
+        price = price == null ? 0 : price;
         priceInp.val(price);
         priceTd.find("span").text(price);
-        setSubTotal(tr,price,quantity);
+    	quantityInp.val(1);
+
+        setSubTotal(tr,price,1);
     });
 
+    //存放quantity的舊值
+    var oldquantity ;
+    $("input[name=quantity]").focus(function(){
+    	oldquantity = $(this).val();
+    })
     //數量填好後自動算出小計
     $("input[name=quantity]").change(function(){
         var tr = $(this).parents("tr");
         var quantity = $(this).val();
+        if(quantity < 1){
+        	alert("數量不可為0或為負");
+        	$(this).val(oldquantity);
+    		return false;
+        }else{
+        	oldquantity = quantity;
+        }
         var price = tr.find("input[name=price]").val();
         setSubTotal(tr,price,quantity);
     });
-    
     //刪除明細項目 
     $("input[name=delete]").click(function(){
     	var c = 0;
@@ -49,8 +76,7 @@ $(document).ready(function() {
     
     //確定新增
 	$("#add").click(function() {
-		if(validate($("#owner").val(),"訂購人") && 
-				validate($("#createUser").val(),"建立人")){
+		if(validate($("#owner").val(),"訂購人") && validate($("#status").val(),"訂單狀態")){
 			add();
 		}
     });
@@ -106,9 +132,12 @@ $(document).ready(function() {
         po.id=$("#id").val();
         po.total=$("#total").val();
         po.owner=$("#owner").val(); 
-        po.status="訂購成功";
-        po.createUser=$("#createUser").val();
-        po.updateUser=$("#createUser").val();
+        po.status=$("#status").val();
+        po.freightId=$("#freightId").val();
+        po.freightName=$("#freightName").val();
+        var user = $("#action").val() == "add" ? $("#createUser") : $("#updateUser");
+        po.createUser=user.val();
+        po.updateUser=user.val();
         po.poDetail = [];
 
         var orginValue = [];

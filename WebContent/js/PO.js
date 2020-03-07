@@ -26,6 +26,8 @@ $(document).ready(function() {
     	$("#searchForm select").each(function(){
     		$(this).val("");
     	});
+
+    	$("#searchForm").submit();
 	});
     //新增
 	$("#add").click(function(){
@@ -34,7 +36,18 @@ $(document).ready(function() {
 	
 	//修改
 	$("input[name=update]").click(function() {
-		location.href="POUpdate.jsp";
+		location.href="POAdd.jsp?id="+$(this).attr("uuid");
+	});
+	
+	//取消訂購
+	$("input[name=del]").click(function() {
+        var common = new Object();
+        common.action = "del";
+        $.post("../../POServlet",{"id":$(this).attr("uuid"),"common":JSON.stringify(common)},function(rs){
+        	if(rs == "ok"){
+        		location.reload();
+        	}
+        });
 	});
 	
 	//上一頁
