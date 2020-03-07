@@ -106,7 +106,7 @@ $(document).ready(function() {
         po.id=$("#id").val();
         po.total=$("#total").val();
         po.owner=$("#owner").val(); 
-        po.status="訂單完成";
+        po.status="訂購成功";
         po.createUser=$("#createUser").val();
         po.updateUser=$("#createUser").val();
         po.poDetail = [];

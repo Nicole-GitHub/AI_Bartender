@@ -11,9 +11,11 @@
 <script src="../../js/POAdd.js"></script>
 <%
 	PODao dao = new PODao();
-	int pageNum = new CommonUtil().StringToInt(request.getParameter("pageNum"));
+	CommonUtil comm = new CommonUtil();
+	String id = comm.getString(request.getParameter("id"));
+	int pageNum = comm.StringToInt(request.getParameter("pageNum"));
 	if(pageNum < 0) pageNum = 0;
-	String id = dao.getId();
+	id = id.equals("") ? dao.getId() : id;
 	String now = new DateUtil().getNowDateTimeFormat("yyyy-MM-dd HH:mm:ss");
 	//System.out.println(pageNum);
 %>
@@ -39,9 +41,10 @@
 						<td>
 							<label>訂購人：</label>
 							<select id="owner" name="owner">
-							<c:forEach items="<%=dao.getUsersList() %>" var="user">
-								<option value="${user.email}">${user.email}</option>
-							</c:forEach>
+								<option value="">=== 請選擇 ===</option>
+								<c:forEach items="<%=dao.getUsersList() %>" var="user">
+									<option value="${user.email}">${user.email}</option>
+								</c:forEach>
 							</select>
 						</td>
 						<td>

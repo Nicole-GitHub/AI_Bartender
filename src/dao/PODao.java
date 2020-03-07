@@ -92,26 +92,48 @@ public class PODao {
 	}
 
 	/**
-	 * 查詢(全、單一筆)
+	 * 查詢(全、單一筆、搜尋)
 	 * 
 	 * @param po
 	 * @return
 	 */
 	public ArrayList<PO> query(PO po) {
-		sqlPO = "select * from " + tablePO;
-		if (po != null) {
-			sqlPO += " where id = '" + po.getId() + "'";
+		sqlPO = "select id,total,owner,status,createUser,createTime,updateUser,updateTime from " + tablePO + " where 1=1";
+		boolean poIsNotNull = po != null && !comm.getString(po.getId()).equals("");
+		
+		//進入訂單明細頁所需
+		if (poIsNotNull) {
+			sqlPO += " and id = '" + po.getId() + "'";
 			sqlPD = "select pd.*,w.chName from " + tablePD + " pd left join Wine w on pd.wineId = w.id "
 					+ " where pd.poid = '" + po.getId() + "'";
 		}
-		sqlPO += " order by id desc";
-		System.out.println("PO =" + po);
+		
+		//搜尋條件
+		if(!comm.getString(po.getOwner()).equals("")) {
+			sqlPO += " and owner = ?";
+		}
+
+		if(!comm.getString(po.getStatus()).equals("")) {
+			sqlPO += " and status = ?";
+		}
+		
+		sqlPO += " order by id desc;";
+//		System.out.println("PO =" + po);
 		System.out.println("sqlPO =" + sqlPO);
 		ArrayList<PO> arr = new ArrayList<PO>();
 		PO rsPo = null;
 		PODetail rsPoDetail = null;
 		try {
 			ps = conn.prepareStatement(sqlPO);
+			int parameterIndex = 1;
+			//搜尋條件
+			if(!comm.getString(po.getOwner()).equals("")) {
+				ps.setString(parameterIndex++, po.getOwner());
+			}
+
+			if(!comm.getString(po.getStatus()).equals("")) {
+				ps.setNString(parameterIndex++, po.getStatus());
+			}
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				rsPo = new PO();
@@ -125,8 +147,9 @@ public class PODao {
 				rsPo.setUpdateTime(rs.getString("updateTime"));
 				arr.add(rsPo);
 			}
-
-			if (po != null) {
+			
+			//進入訂單明細頁所需
+			if (poIsNotNull) {
 				arr = new ArrayList<PO>();
 				System.out.println("sqlPD =" + sqlPD);
 				ps = conn.prepareStatement(sqlPD);
@@ -227,9 +250,10 @@ public class PODao {
 	public ArrayList<Users> getUsersList() {
 		ArrayList<Users> list = new ArrayList<Users>();
 		Users users;
-		sql = "select * from Users";
+		sql = "select * from Users where type = ?";
 		try {
 			ps = conn.prepareStatement(sql);
+			ps.setNString(1, "一般");
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				users = new Users();
