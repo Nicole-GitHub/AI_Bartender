@@ -34,9 +34,17 @@ $(document).ready(function() {
     
     //刪除明細項目 
     $("input[name=delete]").click(function(){
-        $(this).parents("tr").remove();
-        setTotal();
-        resize();
+    	var c = 0;
+    	$(this).parents("table").find("tr").each(function(){
+    		c++;
+    	});
+    	if(c > 3){
+	        $(this).parents("tr").remove();
+	        setTotal();
+	        resize();
+        }else{
+        	alert("至少要有一筆訂單明細");
+        }
     });
     
     //確定新增
@@ -112,7 +120,7 @@ $(document).ready(function() {
         	}
         	var value = $(this).val();
         	if(orginValue.Contains(value)){
-        		alert("商品重複或空值");
+        		alert("商品名稱重複或空值");
         		duplicate = true;
         		return false;
         	}
@@ -127,8 +135,11 @@ $(document).ready(function() {
             if(poDetail.wineId != ""){
                 po.poDetail.push(poDetail);
             }
-            // console.log(objDetail);
         });
+        if(po.poDetail == ""){
+        	alert("請選擇商品名稱");
+        	return false;
+        }
         if(!duplicate){
 	        $.post("../../POServlet",{"po":JSON.stringify(po),"common":JSON.stringify(common)},function(rs){
 	        	if(rs == "ok"){

@@ -9,20 +9,27 @@ $(document).ready(function() {
 		windowResize(bodyw);
 	}	
 	
+    //取消
+	$("#cancel").click(function(){
+		location.href="PO.jsp";
+	})
+	
+	//上一頁
 	$("#pre").click(function() {
 		var pageNum = $("#pageNum").val();
-		$("#form").attr("action", "query.jsp");
+		$("#queryForm").attr("action", "PODetail.jsp");
 		if (pageNum > 0) {
 			$("#pageNum").val(--pageNum);
 		}
-		$("#form").submit();
+		$("#queryForm").submit();
 	});
 
+	//下一頁
 	$("#next").click(function() {
 		var pageNum = $("#pageNum").val();
-		$("#form").attr("action", "query.jsp");
+		$("#queryForm").attr("action", "PODetail.jsp");
 		$("#pageNum").val(++pageNum);
-		$("#form").submit();
+		$("#queryForm").submit();
 	});
 
 });

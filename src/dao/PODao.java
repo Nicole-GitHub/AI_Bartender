@@ -101,11 +101,12 @@ public class PODao {
 		sqlPO = "select * from " + tablePO;
 		if (po != null) {
 			sqlPO += " where id = '" + po.getId() + "'";
-			sqlPD = "select * from " + tablePD + " where poid = '" + po.getId() + "'";
+			sqlPD = "select pd.*,w.chName from " + tablePD + " pd left join Wine w on pd.wineId = w.id "
+					+ " where pd.poid = '" + po.getId() + "'";
 		}
 		sqlPO += " order by id desc";
 		System.out.println("PO =" + po);
-		System.out.println("sql =" + sqlPO);
+		System.out.println("sqlPO =" + sqlPO);
 		ArrayList<PO> arr = new ArrayList<PO>();
 		PO rsPo = null;
 		PODetail rsPoDetail = null;
@@ -127,6 +128,7 @@ public class PODao {
 
 			if (po != null) {
 				arr = new ArrayList<PO>();
+				System.out.println("sqlPD =" + sqlPD);
 				ps = conn.prepareStatement(sqlPD);
 				rs = ps.executeQuery();
 
@@ -136,7 +138,7 @@ public class PODao {
 //				System.out.println("C==>" + c);
 				PODetail[] rsPoDetailArr = new PODetail[c];
 				int i = 0;
-				do{
+				do {
 					rsPoDetail = new PODetail();
 					rsPoDetail.setPoId(rs.getString("poid"));
 					rsPoDetail.setPrice(rs.getInt("price"));
@@ -144,8 +146,9 @@ public class PODao {
 					rsPoDetail.setSubtotal(rs.getInt("subtotal"));
 					rsPoDetail.setUnit(rs.getString("unit"));
 					rsPoDetail.setWineId(rs.getString("wineId"));
+					rsPoDetail.setWineName(rs.getString("chName"));
 					rsPoDetailArr[i++] = rsPoDetail;
-				}while(rs.next());
+				} while (rs.next());
 				rsPo.setPoDetail(rsPoDetailArr);
 				arr.add(rsPo);
 			}
@@ -186,7 +189,7 @@ public class PODao {
 	}
 
 	/**
-	 * 列出wine的所有項目
+	 * 列出wine的所有項目或單一個項目
 	 */
 	public ArrayList<Wine> getWineList() {
 		ArrayList<Wine> list = new ArrayList<Wine>();

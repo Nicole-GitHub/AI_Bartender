@@ -3,10 +3,19 @@ package model;
 public class PODetail {
 	private String poId;
 	private String wineId;
+	private String wineName; //not real
 	private Integer price;
 	private String unit;
 	private Integer quantity;
 	private Integer subtotal;
+
+	public String getWineName() {
+		return wineName;
+	}
+
+	public void setWineName(String wineName) {
+		this.wineName = wineName;
+	}
 
 	public String getPoId() {
 		return poId;
