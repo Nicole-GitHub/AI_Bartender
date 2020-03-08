@@ -4,10 +4,11 @@ $(document).ready(function() {
 	$(window).resize(function () {
 		resize();
 	});
+	
     function resize(){
-		var bodyw = $(".body").height();
-		windowResize(bodyw);
-	}	
+		var bodyh = $(".content").height();
+		windowResize(bodyh);
+	}
 	
     //取消
 	$("#cancel").click(function(){
@@ -18,7 +19,6 @@ $(document).ready(function() {
 	$("#pre").click(function() {
 		var pageNum = $("#pageNum").val();
 		$("#queryForm").attr("action", "PODetail.jsp");
-		alert(pageNum);
 		if (pageNum > 0) {
 			$("#pageNum").val(--pageNum);
 		}

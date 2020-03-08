@@ -4,9 +4,10 @@ $(document).ready(function() {
 	$(window).resize(function () {
 		resize();
 	});
+	
     function resize(){
-		var bodyw = $(".body").height();
-		windowResize(bodyw);
+		var bodyh = $(".content").height();
+		windowResize(bodyh);
 	}
 
 //	//日期套件

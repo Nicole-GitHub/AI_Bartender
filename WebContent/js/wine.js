@@ -7,9 +7,9 @@ $(document).ready(function(){
 	});
 	
     function resize(){
-		var filterw = $(".filter").height();
-		var winew = $(".showWine").height();
-		windowResize(winew+filterw);
+		var filterh = $(".filter").height();
+		var wineh = $(".showWine").height();
+		windowResize(wineh+filterh);
 	}
 	
 	var slideSpeed=50;

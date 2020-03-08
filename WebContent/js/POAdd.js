@@ -1,15 +1,20 @@
 $(document).ready(function() {
-    resize();
 
+	resize();
 	$(window).resize(function () {
 		resize();
-    });
+	});
+	
+    function resize(){
+		var bodyh = $(".content").height();
+		windowResize(bodyh);
+	}
     
     // 新增明細項目
     // .clone(true)才能讓clone出來的子元素也能有event功能
     $("#addDetail").click(function(){
         $('.qTable').append($("#tempRow").clone(true).removeAttr("id").css("display","table-row"));
-        resize();
+        windowResize($(".content").height());
     });
 
     // 存放status的舊值
@@ -135,11 +140,6 @@ $(document).ready(function() {
     	$("#total").val(total);
     	$("#total").parent().find("span").text(total);
 	}
-    // 重新調整footer位置
-    function resize(){
-        var bodyw = $(".body").height();
-		windowResize(bodyw);
-    }
 
     // 判斷訂單明細內的商品名稱陣列內的值是否有重複
     Array.prototype.Contains = function(element) {

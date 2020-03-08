@@ -33,8 +33,6 @@ body{
 	float:left;
 	width:10%;
 	min-width:100px;
-	//border:1px red solid;
-	height:85vh;
 }
 .body .nav p a{
     color: #F9E7AA;
@@ -46,6 +44,12 @@ body{
 	min-width:880px;
 	float:right;
 	background-color: #fff;
-	min-height: 680px;
 	
+}
+.footer{
+	width: 100%;
+}
+.positionFix {
+	position: fixed;
+	bottom: 0;
 }

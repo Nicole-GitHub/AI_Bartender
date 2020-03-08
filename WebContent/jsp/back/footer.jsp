@@ -10,18 +10,19 @@
 	</body>
 	
     <script type="text/javascript">
-	<!--
-	function windowResize(bodyw){
-		var vw = $(window).height();
-		var headerw = $(".header").height();
-		var footerw = $(".footer").height();
-		if (bodyw < vw - headerw - footerw) {
-			$(".footer").addClass("positionFix");
-		}else{
-			$(".footer").removeClass("positionFix");
+
+		function windowResize(bodyh){
+			bodyh += 50;
+			var vh = $(window).height();
+			var headerh = $(".header").height();
+			var footerh = $(".footer").height();
+			if (bodyh < vh - headerh - footerh) {
+				$(".footer").addClass("positionFix");
+				$(".bodyRight").height(vh - headerh - footerh);
+			}else{
+				$(".footer").removeClass("positionFix");
+				$(".bodyRight").height(bodyh);
+			}
 		}
-	}
-	
-	//-->
-</script>
+	</script>
 </html>
