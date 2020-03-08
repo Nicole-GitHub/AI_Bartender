@@ -12,20 +12,22 @@
     <body>
     	<!-- header -->
        <div class="header">
-           <div style="float:left;width:30%;margin-left:3vw">
-               <img src="../../imgs/common/logo-02.png" style="width:100%" />
+           <div class="logo" >
+               <img src="../../imgs/common/webImg-02.png" />
            </div>
-           <div style="float:right;width:30%;text-align:right;margin-right:4vw">
-               <div style="font-size:1.5vw;color:#E79550;margin: 2vw 1vw"> 歡迎回來 Jeger</div>
-               <div style="font-size:1.5vw;"> 
+           <div class="loginInfo">
+               <div class="welcome"> 歡迎回來 Jeger</div>
+               <div class="functionLink"> 
                    <a href="#"><span>AI侍酒師</span></a>&emsp;
                    <a href="#"><span>關於</span></a>&emsp;
                    <a href="#"><span>註冊</span></a>&emsp;
-                   <a href="#"><img src="../../imgs/common/cart-04.png" style="width:25px;vertical-align: bottom;" /></a>
+                   <a href="#"><img src="../../imgs/common/webImg-03.png" class="cart" /></a>
                </div>
            </div>
-       <!-- banner -->
-       <img src="../../imgs/common/banner-03.png" style="width:100%"/>
-       <!-- /banner -->
        </div>
        <!-- /header -->
+       <!-- banner -->
+       <div class="banner" >
+       		<img src="../../imgs/common/webImg-13.png"/>
+       </div>
+       <!-- /banner -->

@@ -1,7 +1,10 @@
 
 body{
 	margin:0;
+	font-family: "微軟正黑體";
 }
+
+/*========================= header =========================*/
 .header div a span{
 	color:#E79550;
 	font-weight: bold;
@@ -9,9 +12,46 @@ body{
 .header{
 	background-color: #393332;
 	overflow: auto;
-	margin:0%;
-	padding: 0%;
 }
+.header .logo{
+	float:left;
+	width:250px;
+	margin-left:3vw;
+}
+.header .logo img{
+	width:100%;    
+	vertical-align: bottom;
+}
+.header .loginInfo{
+	float:right;
+	width:300px;
+	text-align:right;
+	margin-right:4vw;
+}
+.header .loginInfo div{
+	font-size:14pt;
+}
+.header .loginInfo .welcome{
+	color:#E79550;
+	margin: 21px 0 1vw;
+}
+.cart{
+	width:30px;
+	vertical-align: bottom;
+}
+
+/*========================= banner =========================*/
+.banner{
+	background-color: #E79550;
+    height: 2vh;
+}
+.banner img{
+	height: 100%;
+    margin-left: 4vw;
+    vertical-align: top;
+}
+
+/*========================= footer =========================*/
 .footer{
 	width: 100%;
 	text-align: center;
@@ -19,11 +59,9 @@ body{
 }
 .footer div{
 	overflow: auto;
-	font-size: 1vw;
+	font-size: 10pt;
 }
-.footer div p{
-	padding: 0.5vw 0;
-}
+
 .footer .WarningSign{
 	background-color:#E79550;
 }
