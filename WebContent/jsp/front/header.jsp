@@ -6,7 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <title>AI_Bartender</title>
-		<link rel="stylesheet" href="../../css/common.css"/>
+		<link rel="stylesheet" href="../../css/front/common.css"/>
 		<script src="../../js/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
     </head>
     <body>

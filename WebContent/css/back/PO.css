@@ -1,0 +1,136 @@
+@charset "UTF-8";
+
+.content{
+	width: 95%;
+    min-width: 800px;
+    margin: auto;
+    /* overflow: auto; */
+}
+
+
+.content .pageName{
+    margin: 4% 4% 0 0;
+	float:right;
+	font-size:22pt;
+	border-bottom:0.5px #898989a6 solid;
+}
+
+.content .search{
+	margin: 4% 0;
+	float:left;
+	font-size:12pt;
+    min-width: 500px;
+    width: 70%;
+}
+
+.titleTable {
+	text-align: left;
+    width: 100%;
+}
+.titleTable tr {
+	height: 3vh;
+}
+.queryTitle{
+	font-weight: bold;
+    clear: both;
+    margin: 14px;
+}
+/* ================================== qTable ========================================= */
+
+.qTable {
+	text-align: center;
+	border-spacing: 0;
+	width: 100%;
+    font-size: 12pt;
+}
+
+.qTable tr:not(:first-child){
+	height:45px;
+}
+
+.qTable tr:first-child{
+    background-color: #393332;
+}
+.qTable th {
+    color: #fff;
+    padding: 4px;
+}
+
+.qTable td{
+	border-top:0.5px #898989a6 solid;
+}
+
+/* ================================== eTable ========================================= */
+
+.eTable span,
+.eTable img {
+	float: left;
+	margin: 1%;
+}
+
+.eTable span {
+	margin: 2%;
+	font-size:14pt;
+}
+
+.eTable span font{
+	color:red;
+}
+
+.eTable {
+	width: 80%;
+	margin: 0 10%;
+	padding: 1%;
+	border-spacing: 0;
+}
+
+.eTable td {
+	border-bottom:1px black solid;
+	text-align: left;
+	padding-left: 20px;
+}
+.eTable td:first-child {
+	width:65%;
+}
+
+/* =========================================================================== */
+
+input[type="button"] {
+	font-size: 12pt;
+    cursor: pointer;
+    color: #fff;
+    background-color: #A11E4A;
+    border: 0;
+    padding: 5px 15px;
+    font-family: "微軟正黑體";
+}
+
+.footerButton{
+    margin: 20px auto;
+    clear:both;
+}
+#pre , #next , #page {
+	width: 20px;
+    height: 20px;
+    padding:0;
+    font-size:10pt;
+    color: black;
+    background-color: transparent;
+}
+.page{
+	margin: 20px auto 14px auto;
+	width:70px;
+    overflow: hidden;
+    height: 25px;
+}
+.page div{
+	float:left;
+    border: 1px #898989a6 solid;
+}
+.showPageNum{
+	border:0 !important;
+}
+#page{
+	padding: 2px 0 3px 0;
+    border: 1px #898989a6 solid;
+}

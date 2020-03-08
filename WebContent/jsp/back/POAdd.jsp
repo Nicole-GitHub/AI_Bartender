@@ -6,8 +6,8 @@
 	import="dao.PODao"
 	import="java.util.ArrayList" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:include page="../common/header.jsp"></jsp:include>
-<link rel="stylesheet" href="../../css/PO.css" />
+<jsp:include page="header.jsp"></jsp:include>
+<link rel="stylesheet" href="../../css/back/PO.css" />
 <script src="../../js/POAdd.js"></script>
 <%
 	PODao dao = new PODao();
@@ -30,12 +30,12 @@
 <c:set var="action" value="<%=action %>" />
 <c:set var="id" value="<%=id %>" />
 <c:set var="poList" value="<%=poList %>" />
-<div class="body">
+<div class="content">
 	<form id="form" action="../../POServlet" method="post">
 	<input type="hidden" id="action" name="action" value="${action eq '新增' ? 'add' : 'update'}"/>
 		<div>
-			<div><h1><b>訂單${action }</b></h1></div>
-			<div>
+			<div class="pageName">訂單${action }</div>
+			<div class="search">
 				<table class="titleTable">
 					<tr>
 						<td>
@@ -101,7 +101,7 @@
 			</div>
 		</div><!--panel-->
 		<p/>
-		<div><b>訂單明細</b><input type="button" value="新增明細" name="addDetail" id="addDetail"></div>
+		<div class="queryTitle">訂單明細&emsp;<input type="button" value="新增訂單明細" name="addDetail" id="addDetail"></div>
 		<div>
 			<table class="qTable" style="padding:0;">
 				<tr>
@@ -168,11 +168,11 @@
 			</table>
 		</div>
 		
-		<div>
-			<input type="button" value="確定新增" name="add" id="add">
+		<div class="footerButton">
+			<input type="button" value="確定${action }" name="add" id="add">
 			<input type="button" value="取消" name="cancel" id="cancel" >
 		</div>
 	</form>
 </div>
 
-<jsp:include page="../common/footer.jsp"></jsp:include>
+<jsp:include page="footer.jsp"></jsp:include>

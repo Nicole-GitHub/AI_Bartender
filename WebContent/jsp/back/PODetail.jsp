@@ -7,11 +7,9 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<jsp:include page="../common/header.jsp"></jsp:include>
-<link rel="stylesheet" href="../../css/PO.css" />
+<jsp:include page="header.jsp"></jsp:include>
+<link rel="stylesheet" href="../../css/back/PO.css" />
 <script src="../../js/PODetail.js"></script>
-<style>
-</style>
 <%
 	int pageNum = new CommonUtil().StringToInt(request.getParameter("pageNum"));
 	if(pageNum < 0) pageNum = 0;
@@ -23,10 +21,10 @@
 	ArrayList<PO> poList = dao.query(po);
 	request.setAttribute("poList", poList);
 %>
-<div class="body">
+<div class="content">
 	<div>
-		<div><h1><b>訂單明細查詢</b></h1></div>
-		<div>
+		<div class="pageName">訂單明細查詢</div>
+		<div class="search">
 			<table class="titleTable">
 				<tr>
 					<td>
@@ -71,11 +69,11 @@
 			</table><!--queryForm !-->
 		</div>
 	</div><!--panel-->
-	<div><h3><b>訂單明細</b></h3></div>
+	<div class="queryTitle">訂單明細</div>
 	<div>
 		<form id="queryForm" action="#" method="post">
 			<input type="hidden" id="id" name="id" value="${poList[0].id }" > 
-			<input id="pageNum" name="pageNum" type="number" value="<%=pageNum%>" hidden>
+			<input id="pageNum" name="pageNum" type="hidden" value="<%=pageNum%>" >
 			<table class="qTable">
 				<tr>
 					<th>商品編號</th>
@@ -87,8 +85,8 @@
 				</tr>
 				<c:set var="pageRow" value="<%=pageNum * 10  %>" />
 				<c:forEach items="${poList[0].poDetail }" var="detail" varStatus="vs">
-					<c:if test="${vs.index >= pageRow && vs.index <= pageRow + 10}" >
-						<tr style='background-color:${vs.index % 2 == 0 ? "#f6c184" : "#f9dbb8" }' >
+					<c:if test="${vs.index >= pageRow && vs.index < pageRow + 10}" >
+						<tr style='background-color:${vs.index % 2 == 0 ? "#FFF" : "#FDEBE0" }' >
 							<td><a href="ProductDetail.jsp">${detail.wineId}</a></td>
 							<td>${detail.wineName}</td>
 							<td>${detail.price}</td>
@@ -98,27 +96,22 @@
 						</tr>
 					</c:if>
 				</c:forEach>
-				<c:if test="${fn:length(poList[0].poDetail) > 10 }">
-					<tr>
-						<td colspan="6">
-							<br>
-							<c:if test="${pageRow > 0 }">
-							<input type="button" id="pre" name="pre" value="上一頁">
-							</c:if>
-							<c:if test="${fn:length(poList[0].poDetail) > pageRow + 10 }">
-							<input type="button" id="next" name="next" value="下一頁">
-							</c:if>
-							<span>&nbsp;&nbsp;&nbsp;&nbsp;第<%=pageNum+1 %>頁</span>
-						</td>
-					</tr>
+				<c:if test="${empty poList[0].poDetail }">
+					<tr><td colspan="7">查無資料</td></tr>
 				</c:if>
 			</table>
+			<c:if test="${not empty poList[0].poDetail}">
+				<div class="page">
+					<div><input type="button" id="pre" name="pre" ${pageRow > 0 ? '' : 'disabled'} value="<"></div>
+					<div class="showPageNum"><span id="page">&nbsp; <%=pageNum+1 %> &nbsp;</span></div>
+					<div><input type="button" id="next" name="next" ${fn:length(poList[0].poDetail) > pageRow + 10 ? '' : 'disabled'} value=">"></div>
+				</div>
+			</c:if>
 		</form>
 	</div>
-	
-	<div>
-		<input type="button" value="回訂單查詢頁" name="cancel" id="cancel" >
+	<div class="footerButton">
+		<input type="button" value="回訂單查詢" name="cancel" id="cancel" >
 	</div>
 </div>
 
-<jsp:include page="../common/footer.jsp"></jsp:include>
+<jsp:include page="footer.jsp"></jsp:include>

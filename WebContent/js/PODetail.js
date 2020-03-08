@@ -18,6 +18,7 @@ $(document).ready(function() {
 	$("#pre").click(function() {
 		var pageNum = $("#pageNum").val();
 		$("#queryForm").attr("action", "PODetail.jsp");
+		alert(pageNum);
 		if (pageNum > 0) {
 			$("#pageNum").val(--pageNum);
 		}
