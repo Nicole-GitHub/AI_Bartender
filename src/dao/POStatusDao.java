@@ -26,8 +26,9 @@ public class POStatusDao {
 	public ArrayList<POStatus> query(String id, String action) {
 		ArrayList<POStatus> list = new ArrayList<POStatus>();
 		POStatus poStatus;
-		sql = "select * from " + tablePS + " POStatus where poid = ? order by updateTime desc "
+		sql = "select * from " + tablePS + " where poid = ? order by updateTime desc "
 				+ (action.equals("final") ? "limit 1" : "");
+		System.out.println(sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, id);

@@ -15,7 +15,7 @@
                <img src="../../imgs/common/webImg-30.png" />
            </div>
            <div class="loginInfo">
-               <div style="font-size:1vw;color:#E79550;margin: 1vw 1vw"> 管理員 admin</div>
+               <div> 管理員 admin</div>
            </div>
            <div class="banner"></div>
        </div>

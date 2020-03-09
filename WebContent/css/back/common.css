@@ -2,7 +2,8 @@
 body{
 	margin:0;
 	background-color:#393332;
-    font-family: "微軟正黑體";
+	font-family: Arial, Microsoft JhengHei;
+	width: 100%;
 }
 
 .header .logo{
@@ -15,6 +16,11 @@ body{
 .header .loginInfo{
 	float:right;
 	margin:3vh 3vw 0 0;
+}
+.header .loginInfo div{
+	font-size:1vw;
+	color:#E79550;
+	margin: 1vw 1vw 0 0;
 }
 .header .banner , .footer .footerTop{
 	width:100%;

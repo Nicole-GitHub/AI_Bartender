@@ -117,7 +117,11 @@ public class PODao {
 	}
 
 	/**
-	 * 查詢(全、單一筆、搜尋)
+	 * 查詢
+	 * 	後端 訂單管理 查詢頁 po = null
+	 * 	後端 訂單管理 明細頁/更新頁 po 有 id
+	 * 	後端 訂單管理 查詢頁搜尋 po 有查詢條件的欄位值
+	 * 	前端 查歷史詢問單 po 有 owner
 	 * 
 	 * @param po
 	 * @return
@@ -127,7 +131,7 @@ public class PODao {
 		boolean poIsNotNull = po != null && !comm.getString(po.getId()).equals("");
 		
 		//進入訂單明細頁所需
-		if (poIsNotNull) {
+		if (poIsNotNull && !comm.getString(po.getId()).equals("")) {
 			sqlPO += " and id = '" + po.getId() + "'";
 			sqlPD = "select pd.*,w.chName from " + tablePD + " pd left join Wine w on pd.wineId = w.id "
 					+ " where pd.poid = '" + po.getId() + "'";
@@ -149,6 +153,7 @@ public class PODao {
 		PO rsPo = null;
 		PODetail rsPoDetail = null;
 		try {
+			Connection conn = DBConn.getConn();
 			ps = conn.prepareStatement(sqlPO);
 			int parameterIndex = 1;
 			//搜尋條件

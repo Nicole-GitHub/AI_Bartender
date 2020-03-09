@@ -29,8 +29,10 @@ public class DBConn {
 		String password = p.getProperty("password");
 		String driver = p.getProperty("driver");
 		try {
+			System.out.println("connection start");
 			Class.forName(driver);
 			cn = DriverManager.getConnection(url,id,password);
+			System.out.println("connection succees");
 		}catch(Exception e) {
 			System.out.println("Error: "+e.getMessage());
 		}
