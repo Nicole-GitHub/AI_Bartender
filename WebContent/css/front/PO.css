@@ -9,7 +9,8 @@
 	margin:auto;
 	text-align: center;
 }
-.body .content p{
+.body .content p ,
+.body .content table tr:last-child{
 	font-size: 12pt;
 	color:#A11E4A;
 	font-weight: bold;
@@ -43,7 +44,8 @@
 	color: #E79550;
 }
 #cancel{
-	margin-top: 5vh;
+	margin-top: 1vh;
+	margin-bottom: 2vh;
 	font-size: 12pt;
     cursor: pointer;
     color: #fff;

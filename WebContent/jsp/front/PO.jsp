@@ -25,11 +25,11 @@
 				%>
 				<c:forEach items="<%=new PODao().query(po) %>" var="po">
 					<tr>
-						<td><a href="PODetail.jsp?poId=${po.id }">${po.id }</a></td>
+						<td><a href="PODetail.jsp?poId=${po.id }&total=${po.total }">${po.id }</a></td>
 						<td>${po.createTime }</td>
 						<td>${po.total }</td>
 						<td><a href="POStatus.jsp?poId=${po.id }&freightId=${po.freightId }&freightName=${po.freightName }">${po.status }</a></td>
-						<td>X</td>
+						<td><img src="../../imgs/common/x.png" style="width: 10px"></td>
 					</tr>
 				</c:forEach>
 			</table>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="dao.PODao,model.PO,util.CommonUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:include page="header.jsp"/>
 <link rel="stylesheet" href="../../css/front/PO.css"/>
@@ -9,6 +10,7 @@
 	CommonUtil comm = new CommonUtil();
 	String poId = comm.getString(request.getParameter("poId"));
 	String total = comm.getString(request.getParameter("total"));
+	request.setAttribute("total", total);
 %>
 <div class="body">
 	<div class="banner2"><img src="../../imgs/common/WebPhoto/photo-04.jpg" style="width:100%"></div>
@@ -33,10 +35,15 @@
 							<div>品種：${PODetailV.grape }</div>
 						</td>
 						<td width="10%">${PODetailV.quantity }</td>
-						<td width="15%">${PODetailV.price }</td>
-						<td width="20%">${PODetailV.subtotal }</td>
+						<td width="15%"><fmt:formatNumber value="${PODetailV.price}" type="number" pattern="$###,###" /></td>
+						<td width="20%"><fmt:formatNumber value="${PODetailV.subtotal}" type="number" pattern="$###,###" /></td>
 					</tr>
 				</c:forEach>
+				<tr>
+					<td colspan="5" style="border-top:0;text-align:right">
+						總金額&emsp;<fmt:formatNumber value="${total}" type="number" pattern="$###,###" />
+					</td>
+				</tr>
 			</table>
 			<input type="button" id="cancel" name="cancel" value="回詢問單" onclick="location.href='PO.jsp'">
 		</div>
