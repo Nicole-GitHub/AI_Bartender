@@ -15,6 +15,10 @@
 	font-weight: bold;
 }
 
+.body .content p span:not(:first-child){
+	color:lightskyblue;
+}
+
 .body .content table{
 	border-spacing: 0;
 	margin: auto;
@@ -34,6 +38,9 @@
 .body .content table:not(:first-child) tr td{
 	border-top: 1px #898989a6 solid;
 	height: 5vh;
+}
+#chName{
+	color: #E79550;
 }
 #cancel{
 	margin-top: 5vh;

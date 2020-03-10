@@ -17,6 +17,7 @@ import model.Wine;
 import util.CommonUtil;
 import util.DBConn;
 import util.DateUtil;
+import view.PODetailV;
 
 public class PODao {
 	static String sql,sqlPO,sqlPD,sqlPS;
@@ -214,6 +215,42 @@ public class PODao {
 		return arr;
 	}
 	
+	/**
+	 * 前端 訂單明細查詢 
+	 * 
+	 * @param po
+	 * @return
+	 */
+	public ArrayList<PODetailV> queryPODetailV(String poId) {
+		sqlPD = "select pd.*,w.chName,w.imgPath,w.place,w.grape "
+				+ " from " + tablePD + " pd left join Wine w on pd.wineId = w.id "
+				+ " where pd.poid = ? ";
+		
+		System.out.println("sqlPD =" + sqlPD);
+		ArrayList<PODetailV> arr = new ArrayList<PODetailV>();
+		PODetailV rsPoDetailV = null;
+		try {
+			Connection conn = DBConn.getConn();
+			ps = conn.prepareStatement(sqlPD);
+			ps.setString(1, poId);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				rsPoDetailV = new PODetailV();
+				rsPoDetailV.setImgPath(rs.getString("ImgPath"));
+				rsPoDetailV.setWineChName(rs.getString("chName"));
+				rsPoDetailV.setPlace(rs.getString("Place"));
+				rsPoDetailV.setGrape(rs.getString("Grape"));
+				rsPoDetailV.setQuantity(rs.getInt("Quantity"));
+				rsPoDetailV.setPrice(rs.getInt("Price"));
+				rsPoDetailV.setSubtotal(rs.getInt("Subtotal"));
+				arr.add(rsPoDetailV);
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+
+		return arr;
+	}
 	/**
 	 * 取po的id
 	 * 
