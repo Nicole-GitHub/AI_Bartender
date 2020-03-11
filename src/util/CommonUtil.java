@@ -47,5 +47,11 @@ public class CommonUtil {
 			return false;
 		}
 	}
+	public String delFinalWord(String s) {
+		if(!isBlank(s)) {
+			return s.substring(0,s.length()-1);
+		}
+		return "";
+	}
 	
 }

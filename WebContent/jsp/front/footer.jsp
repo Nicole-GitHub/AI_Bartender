@@ -6,17 +6,4 @@
             <div class="copyright"><p>copyright © 2020 AI-sommelier all rights reserved.</p></div>
         </div>
     </body>
-    <script type="text/javascript">
-
-		function windowResize(bodyh){
-			var vh = $(window).height();
-			var headerh = $(".header").height();
-			var footerh = $(".footer").height();
-			if (bodyh < vh - headerh - footerh) {
-				$(".footer").addClass("positionFix");
-			}else{
-				$(".footer").removeClass("positionFix");
-			}
-		}
-	</script>
 </html>

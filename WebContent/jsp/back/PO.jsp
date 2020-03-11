@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-	import="model.PO,util.CommonUtil,dao.PODao,java.util.ArrayList" %>
+	import="model.PO,util.CommonUtil,dao.PODao,dao.UsersDao,java.util.ArrayList" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -37,7 +37,7 @@
 								<label>訂購人：</label>
 								<select id="owner" name="owner">
 									<option value="">=== 請選擇 ===</option>
-									<c:forEach items="<%=dao.getUsersList() %>" var="user">
+									<c:forEach items="<%=new UsersDao().getUsersList() %>" var="user">
 										<option value="${user.email }" ${user.email.equals(owner) ? "selected" : "" }> ${user.name } (${user.email }) </option>
 									</c:forEach>
 								</select>
@@ -99,7 +99,7 @@
 								</c:when>
 								<c:otherwise>
 									<td><input type="button" value="修改" name="update" uuid="${po.id}"></td>
-									<td><input type="button" value="取消訂購" name="del"	uuid="${po.id}"></td>
+									<td><input type="button" value="取消訂購" name="del"	uuid="${po.id}" owner="admin"></td>
 								</c:otherwise>
 							</c:choose>
 						</tr>

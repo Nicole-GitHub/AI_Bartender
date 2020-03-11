@@ -43,9 +43,17 @@ $(document).ready(function() {
 	//取消訂購
 	$("input[name=del]").click(function() {
         var common = new Object();
-        common.action = "del";
-        $.post("../../POServlet",{"id":$(this).attr("uuid"),"common":JSON.stringify(common)},function(rs){
-        	if(rs == "ok"){
+		common.action = "del";
+		console.log("del");
+
+        $.post("../../POServlet",
+        		{
+        	"id":$(this).attr("uuid"),
+        	"owner":$(this).attr("owner"),
+        	"common":JSON.stringify(common)
+        	},function(rs){
+			console.log(rs);
+			if(rs == "ok"){
         		location.reload();
         	}
         });

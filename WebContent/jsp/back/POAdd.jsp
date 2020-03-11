@@ -3,7 +3,7 @@
 	pageEncoding="UTF-8"
 	import="model.*"
 	import="util.CommonUtil,util.DateUtil"
-	import="dao.PODao"
+	import="dao.*"
 	import="java.util.ArrayList" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <jsp:include page="header.jsp"></jsp:include>
@@ -11,6 +11,7 @@
 <script src="../../js/POAdd.js"></script>
 <%
 	PODao dao = new PODao();
+	WineDao wineDao = new WineDao();
 	CommonUtil comm = new CommonUtil();
 	String id = comm.getString(request.getParameter("id"));
 	int pageNum = comm.StringToInt(request.getParameter("pageNum"));
@@ -82,7 +83,7 @@
 							 <c:when test="${empty poList[0].owner}">
 								<select id="owner" name="owner">
 									<option value="">=== 請選擇 ===</option>
-									<c:forEach items="<%=dao.getUsersList() %>" var="user">
+									<c:forEach items="<%=new UsersDao().getUsersList() %>" var="user">
 										<option value="${user.email}" ${poList[0].owner eq user.email ? "selected" : ""}>${user.name} (${user.email})</option>
 									</c:forEach>
 								</select>
@@ -116,7 +117,7 @@
 			    	<td>
 						<select name="wineId">
 							<option value="">請選擇</option>
-							<c:forEach items="<%=dao.getWineList() %>" var="wine">
+							<c:forEach items="<%=wineDao.getWineList() %>" var="wine">
 								<option value="${wine.id}" price="${wine.price}">${wine.id} ${wine.chName}</option>
 							</c:forEach>
 						</select>
@@ -133,7 +134,7 @@
 							<td>
 								<select name="wineId">
 									<option value="">請選擇</option>
-									<c:forEach items="<%=dao.getWineList() %>" var="wine">
+									<c:forEach items="<%=wineDao.getWineList() %>" var="wine">
 										<option value="${wine.id}" price="${wine.price}">${wine.id} ${wine.chName }</option>
 									</c:forEach>
 								</select>
@@ -151,7 +152,7 @@
 								<td>
 									<select name="wineId">
 										<option value="">請選擇</option>
-										<c:forEach items="<%=dao.getWineList() %>" var="wine">
+										<c:forEach items="<%=wineDao.getWineList() %>" var="wine">
 											<option value="${wine.id}" price="${wine.price}" ${detail.wineId eq wine.id ? "selected" : "" }>${wine.id} ${wine.chName }</option>
 										</c:forEach>
 									</select>

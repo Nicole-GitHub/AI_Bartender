@@ -1,16 +1,25 @@
 @charset "UTF-8";
 
 .body .bgImg{
-	background: url(../../imgs/common/webImg-17.png);
-	background-size: 100% 100%;
+    background-size: 100%;
+    background-position: bottom;
+	background-repeat: no-repeat;
+}
+.body .bgImg17{
+	background-image: url(../../imgs/common/webImg-17-1.png);
+}
+.body .bgImg18{
+	background-image: url(../../imgs/common/webImg-18-1.png);
 }
 .body .content{
 	width:70%;
 	margin:auto;
 	text-align: center;
 }
-.body .content p ,
-.body .content table tr:last-child{
+.body .content p {
+	width: 80%;
+    margin: 2vh auto;
+    text-align: left;
 	font-size: 12pt;
 	color:#A11E4A;
 	font-weight: bold;
@@ -43,7 +52,12 @@
 #chName{
 	color: #E79550;
 }
-#cancel{
+#totalTD , #sendTD {
+	border-top:0;
+	text-align:right;
+	color:#A11E4A;
+}
+#cancel , #send{
 	margin-top: 1vh;
 	margin-bottom: 2vh;
 	font-size: 12pt;
@@ -53,4 +67,42 @@
     border: 0;
     padding: 5px 15px;
     font-family: Arial, Microsoft JhengHei;
+}
+.body .content table .wineDetail div{
+	text-align: left;
+	margin:0.5vh 0 ;
+}
+img[name="del"] , img[name="delTR"] {
+	cursor: pointer;
+}
+
+#minus , #plus , .quantity {
+	width: 20px;
+    height: 20px;
+    padding:0;
+    font-size:10pt;
+    color: black;
+    background-color: transparent;
+}
+.quantityTD .quantityDiv{
+	margin: auto;
+	width: 90px;
+	min-width: 100px;
+}
+.quantityTD div div{
+	float:left;
+    border: 1.5px #898989a6 solid;
+}
+.quantityTD div input{
+	border: 0;
+}
+.showQuantityNum{
+	border:0 !important;
+}
+#quantity{
+	padding: 2px 0 3px 0;
+    /*border: 1px #898989a6 solid;*/
+}
+.addBorderBottom{
+	border-bottom: 1px #898989a6 solid;
 }

@@ -62,16 +62,20 @@ public class POServlet extends HttpServlet {
 		CommonUtil comm = new CommonUtil();
         Gson g=new Gson();
 		PODao dao = new PODao();
+		PO po = new PO();
 		System.out.println(request.getParameter("po"));
         Common common = g.fromJson(request.getParameter("common"), Common.class);
         String id = comm.getString(request.getParameter("id"));
+        String owner = comm.getString(request.getParameter("owner"));
         Json2Entity(common);
 		boolean b = false;
 		
 		if (common.getAction().equals("del") && !comm.isBlank(id)) {
-			b = dao.del(id);
+			po.setId(id);
+			po.setOwner(owner);
+			b = dao.del(po);
 		}else if(!common.getAction().equals("del")) {
-	        PO po = g.fromJson(request.getParameter("po"), PO.class);
+	        po = g.fromJson(request.getParameter("po"), PO.class);
 	        Json2Entity(po);
 			b = dao.update(po,common);
 		}else {

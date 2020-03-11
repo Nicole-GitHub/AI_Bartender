@@ -21,7 +21,7 @@
                    <a href="#"><span>AI侍酒師</span></a>&emsp;
                    <a href="#"><span>關於</span></a>&emsp;
                    <a href="#"><span>註冊</span></a>&emsp;
-                   <a href="#"><img src="../../imgs/common/webImg-03.png" class="cart" /></a>
+                   <a href="cart.jsp"><img src="../../imgs/common/webImg-03.png" class="cart" /></a>
                </div>
            </div>
        </div>

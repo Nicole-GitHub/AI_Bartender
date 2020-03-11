@@ -3,17 +3,13 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Common;
 import model.PO;
 import model.PODetail;
 import model.POStatus;
-import model.Users;
-import model.Wine;
 import util.CommonUtil;
 import util.DBConn;
 import util.DateUtil;
@@ -42,7 +38,6 @@ public class PODao {
 		}
 
 		sqlPD = "insert into " + tablePD + " values(?,?,?,?,?,?)";
-		sqlPS = "insert into " + tablePS + " values(?,?,?,sysdate())";
 
 		try {
 			if (common.getAction().equals("add")) {
@@ -81,7 +76,36 @@ public class PODao {
 				ps.setInt(6, detail.getSubtotal());
 				b = ps.executeUpdate() > 0;
 			}
+			chgStatus(po);
 			
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+
+		return b;
+	}
+
+	public boolean del(PO po) {
+		sqlPO = "update " + tablePO + " set status = ? where id = ? ";
+
+		try {
+			ps = conn.prepareStatement(sqlPO);
+			ps.setNString(1, "已取消");
+			ps.setString(2, po.getId());
+			b = ps.executeUpdate() > 0;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		po.setStatus("已取消");
+		po.setUpdateUser(po.getOwner());
+		chgStatus(po);
+		return b;
+	}
+	
+	private void chgStatus(PO po){
+		sqlPS = "insert into " + tablePS + " values(?,?,?,sysdate())";
+
+		try {
 			ArrayList<POStatus> posList = new POStatusDao().query(po.getId(),"final");
 			String oldStatus = "";
 			for(POStatus oldpos : posList) {
@@ -94,27 +118,9 @@ public class PODao {
 				ps.setString(3, po.getUpdateUser());
 				b = ps.executeUpdate() > 0;
 			}
-			
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
-
-		return b;
-	}
-
-	public boolean del(String id) {
-		sqlPO = "update " + tablePO + " set status = ? where id = ? ";
-
-		try {
-			ps = conn.prepareStatement(sqlPO);
-			ps.setNString(1, "已取消");
-			ps.setString(2, id);
-			b = ps.executeUpdate() > 0;
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-
-		return b;
 	}
 
 	/**
@@ -241,6 +247,7 @@ public class PODao {
 				rsPoDetailV.setPlace(rs.getString("Place"));
 				rsPoDetailV.setGrape(rs.getString("Grape"));
 				rsPoDetailV.setQuantity(rs.getInt("Quantity"));
+				rsPoDetailV.setUnit(rs.getString("unit"));
 				rsPoDetailV.setPrice(rs.getInt("Price"));
 				rsPoDetailV.setSubtotal(rs.getInt("Subtotal"));
 				arr.add(rsPoDetailV);
@@ -278,68 +285,6 @@ public class PODao {
 		}
 
 		return id.toString();
-	}
-
-	/**
-	 * 列出wine的所有項目或單一個項目
-	 */
-	public ArrayList<Wine> getWineList() {
-		ArrayList<Wine> list = new ArrayList<Wine>();
-		Wine wine;
-		sql = "select * from Wine";
-		try {
-			ps = conn.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				wine = new Wine();
-				wine.setId(comm.getString(rs.getString("id")));
-				wine.setEnName(comm.getString(rs.getString("enName")));
-				wine.setChName(comm.getString(rs.getString("chName")));
-				wine.setType(comm.getString(rs.getString("type")));
-				wine.setPercent(comm.StringToDouble(rs.getString("percent")));
-				wine.setMl(comm.StringToInt(rs.getString("ml")));
-				wine.setPrice(comm.StringToInt(rs.getString("price")));
-				wine.setUnit(comm.getString(rs.getString("unit")));
-				wine.setPlace(comm.getString(rs.getString("place")));
-				wine.setGrape(comm.getString(rs.getString("grape")));
-				wine.setFeature(comm.getString(rs.getString("feature")));
-				wine.setStatus(comm.getString(rs.getString("status")));
-				wine.setImgPath(comm.getString(rs.getString("imgPath")));
-				list.add(wine);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
-
-	/**
-	 * 列出Users的所有項目
-	 */
-	public ArrayList<Users> getUsersList() {
-		ArrayList<Users> list = new ArrayList<Users>();
-		Users users;
-		sql = "select * from Users where type = ?";
-		try {
-			ps = conn.prepareStatement(sql);
-			ps.setNString(1, "一般");
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				users = new Users();
-				users.setEmail(comm.getString(rs.getString("email")));
-				users.setName(comm.getString(rs.getString("name")));
-				users.setPassword(comm.getString(rs.getString("password")));
-				users.setMobile(comm.getString(rs.getString("mobile")));
-				users.setAddress(comm.getString(rs.getString("address")));
-				users.setBday(comm.getString(rs.getString("bday")));
-				users.setType(comm.getString(rs.getString("type")));
-				users.setStatus(comm.getString(rs.getString("status")));
-				list.add(users);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
 	}
 
 	public static void main(String[] arg) {

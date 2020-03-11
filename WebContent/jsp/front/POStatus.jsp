@@ -12,8 +12,8 @@
 	String freightName = comm.getString(request.getParameter("freighName"));
 %>
 <div class="body">
-	<div class="banner2"><img src="../../imgs/common/WebPhoto/photo-04.jpg" style="width:100%"></div>
-	<div class="bgImg">
+	<div class="banner2"><img src="../../imgs/common/WebPhoto/photo-07.jpg" style="width:100%"></div>
+	<div class="bgImg17 bgImg">
 		<div class="content">
 			<table class="title">
 				<tr>

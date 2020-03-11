@@ -14,7 +14,7 @@
 %>
 <div class="body">
 	<div class="banner2"><img src="../../imgs/common/WebPhoto/photo-04.jpg" style="width:100%"></div>
-	<div class="bgImg">
+	<div class="bgImg17 bgImg">
 		<div class="content">
 			<p><span>詢問單明細</span>&emsp;<span><%=poId %></span></p>
 			
@@ -23,24 +23,26 @@
 					<th>產品</th>
 					<th>資訊</th>
 					<th>數量</th>
+					<th>單位</th>
 					<th>金額</th>
 					<th>小計</th>
 				</tr>
 				<c:forEach items='<%=new PODao().queryPODetailV(poId) %>' var="PODetailV">
 					<tr>
 						<td width="10%"><img src="../../${PODetailV.imgPath }" style="height:8vh"></td>
-						<td width="45%" style="text-align: left;">
+						<td width="40%" class="wineDetail">
 							<div id="chName">${PODetailV.wineChName }</div>
 							<div>產地：${PODetailV.place }</div>
 							<div>品種：${PODetailV.grape }</div>
 						</td>
 						<td width="10%">${PODetailV.quantity }</td>
+						<td width="5%">${PODetailV.unit }</td>
 						<td width="15%"><fmt:formatNumber value="${PODetailV.price}" type="number" pattern="$###,###" /></td>
 						<td width="20%"><fmt:formatNumber value="${PODetailV.subtotal}" type="number" pattern="$###,###" /></td>
 					</tr>
 				</c:forEach>
 				<tr>
-					<td colspan="5" style="border-top:0;text-align:right">
+					<td colspan="6" id="totalTD">
 						總金額&emsp;<fmt:formatNumber value="${total}" type="number" pattern="$###,###" />
 					</td>
 				</tr>

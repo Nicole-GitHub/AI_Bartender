@@ -8,7 +8,7 @@
 <script src="../../js/front/PO.js"></script>
 <div class="body">
 	<div class="banner2"><img src="../../imgs/common/WebPhoto/photo-03.jpg" style="width:100%"></div>
-	<div class="bgImg">
+	<div class="bgImg17 bgImg">
 		<div class="content">
 			<p>詢問單</p>
 			<table>
@@ -19,9 +19,11 @@
 					<th>詢問單狀態</th>
 					<th></th>
 				</tr>
-				<% PODao dao = new PODao();
+				<% 
+					String owner = "nicole@gmail.com";//session.getAttribute("owner");
+					PODao dao = new PODao();
 					PO po = new PO();
-					po.setOwner("nicole@gmail.com");
+					po.setOwner(owner);
 				%>
 				<c:forEach items="<%=new PODao().query(po) %>" var="po">
 					<tr>
@@ -29,7 +31,11 @@
 						<td>${po.createTime }</td>
 						<td>${po.total }</td>
 						<td><a href="POStatus.jsp?poId=${po.id }&freightId=${po.freightId }&freightName=${po.freightName }">${po.status }</a></td>
-						<td><img src="../../imgs/common/x.png" style="width: 10px"></td>
+						<td>
+							<c:if test="${po.status ne '已取消'}">
+								<img src="../../imgs/common/x.png" style="width: 10px" name="del" uuid="${po.id }" owner="<%=owner%>">
+							</c:if>
+						</td>
 					</tr>
 				</c:forEach>
 			</table>
