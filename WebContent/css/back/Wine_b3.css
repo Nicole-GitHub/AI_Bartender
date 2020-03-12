@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+.content .pageName{
+	float: none !important;
+}
+.content table {
+	width:100%;
+}
+.pageNameAndFile {
+	margin: 4%;
+}
+#uploadForm {
+	margin: 14px;
+	border: 4px #A11E4A solid;
+	width: 342px;
+    margin: auto;
+}
+#uploadForm span {
+	color:#fff;
+    font-size: 12pt;
+    background-color: #A11E4A;
+    padding: 5px 10px;
+    font-family: Arial, Microsoft JhengHei !important;
+}
+#uploadForm input {
+	width:210px;
+}
+.ExcelAction{
+	margin-top: 13px;
+}

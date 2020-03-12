@@ -1,20 +1,31 @@
 package servlet;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import util.ExcelUtil;
+import util.FileUtil;
 
 /**
  * Servlet implementation class Import
  */
+@MultipartConfig
 @WebServlet("/Import")
 public class Import extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -31,25 +42,37 @@ public class Import extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
+		String rs = "fail";
+    	FileUtil fileUtil = new FileUtil();
 
-//		String filePath = "C:\\Users\\User\\22\\Create DB and TABLE\\"; // Windows 路徑
-		String filePath = "/Users/nicole/22/AI_Bartender 商品資料/"; // Mac 路徑
+    	Part part = request.getPart("uploadXlsx");
+		System.out.println(part);
+		
+		String filename = fileUtil.getFilename(part);
+		System.out.println("newFilename="+filename);
+		String tempFilePath = getServletContext().getRealPath("/")+filename;		
+
 		try {
-			new ExcelUtil().imp(filePath+"wineImportTest.xlsx");
-		} catch (InvalidFormatException | ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			response.getWriter().print(e.getMessage());
-		}
-		response.getWriter().print("ok");
+			if(filename != null) {
 
+				fileUtil.writeTo(tempFilePath,filename, part);
+				new ExcelUtil().imp(tempFilePath);
+				rs = "ok";
+			}
+		} catch (InvalidFormatException | ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}finally {
+			fileUtil.deleTempFile(tempFilePath);
+		}
+		response.sendRedirect("jsp/back/Wine.jsp?ImportRS="+rs);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }

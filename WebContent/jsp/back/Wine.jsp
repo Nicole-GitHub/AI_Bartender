@@ -18,6 +18,7 @@
 	String place = comm.getString(request.getParameter("place"));
 	String type = comm.getString(request.getParameter("type"));
 	String grape = comm.getString(request.getParameter("grape"));
+	String ImportRS = comm.getString(request.getParameter("ImportRS"));
 	
 	wine.setStatus(status);
 	wine.setPlace(place);
@@ -25,23 +26,32 @@
 	wine.setGrape(grape);
 	wine.setChName(chName);
 	wine.setEnName(enName);
-	System.out.println("status="+status);
+	/* System.out.println("status="+status);
 	System.out.println("place="+place);
 	System.out.println("type="+type);
 	System.out.println("grape="+grape);
 	System.out.println("chName="+chName);
-	System.out.println("enName="+enName);
+	System.out.println("enName="+enName); */
 %>
+
 <c:set var="pageRow" value="<%=pageNum * 10  %>" />
 <c:set var="wineList" value="<%=dao.query(wine)  %>" />
 <jsp:include page="header.jsp"/>
 <link rel="stylesheet" href="../../css/back/PO.css" />
+<link rel="stylesheet" href="../../css/back/Wine_b3.css" />
 <script src="../../js/back/Wine.js"></script>
-<script type="text/javascript" src="<c:url value='../../js/commons/jquery.fileDownload.js' />?${sessionScope.randomId}"></script>
-
+<script type="text/javascript">
+<% if(ImportRS.equals("ok")){%>
+	alert("商品匯入成功");
+	location.href="Wine.jsp";
+<%}else if(ImportRS.equals("fail")){%>
+	alert("商品匯入成功");
+	location.href="Wine.jsp";
+<%}%>
+</script>
 	<div class="content">
-		<div>
-			<div class="pageName">商品查詢</div>
+	<table><tr><td>
+		
 			<div class="search">
 				<form id="searchForm" action="Wine.jsp" method="post">
 					<table class="titleTable">
@@ -93,8 +103,6 @@
 						</tr>
 						<tr>
 							<td>
-								<input type="button" id="import" name="import" value="從Excel匯入">
-								<input type="button" id="export" name="export" value="匯出至Excel">
 							</td>
 							<td style="padding:10px 0 0 20px">
 								<input type="button" id="search" value="查詢" >
@@ -105,8 +113,20 @@
 					</table><!--queryForm !-->
 				</form>
 			</div>
-		</div><!--panel-->
-
+		</td><td>
+			<div class="pageNameAndFile">
+				<div class="pageName">商品查詢</div>
+				<div class="ExcelAction">
+					<form id="uploadForm" action="../../Import" enctype="multipart/form-data" method="post"> 
+						<span>匯入商品資訊檔</span><input type="file" name="uploadXlsx" id="uploadXlsx">
+					</form>
+					<input type="button" id="export" name="export" value="匯出至Excel">
+					<input type="button" id="getSample" name="getSample" value="下載匯入商品資訊範例檔">
+				</div>
+			</div>
+		</td></tr>
+	</table>
+		<!--panel-->
 		<form id="queryForm" action="#" method="post">
 			<input type="hidden" id="id" name="id"> 
 			<input id="action" name="action" type="hidden">

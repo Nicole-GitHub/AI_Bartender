@@ -75,7 +75,7 @@
 			<input type="hidden" id="id" name="id" value="${poList[0].id }" > 
 			<input id="pageNum" name="pageNum" type="hidden" value="<%=pageNum%>" >
 			<table class="qTable">
-				<tr>
+				<tr class="titleTR">
 					<th>商品編號</th>
 					<th>商品名稱</th>
 					<th>單價</th>

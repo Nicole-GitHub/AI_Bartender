@@ -6,7 +6,7 @@
 	import="dao.*"
 	import="java.util.ArrayList" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="header.jsp"/>
 <link rel="stylesheet" href="../../css/back/Wine.css" />
 <script src="../../js/back/WineAdd.js"></script>
 <%
@@ -19,9 +19,7 @@
 	String action = id.equals("") ? "新增" : "修改";
 	
 	ArrayList<Wine> wineList = new ArrayList<Wine>();
-	if(id.equals("")){
-		id = dao.getId();
-	}else{
+	if(!id.equals("")){
 		Wine wine = new Wine();
 		wine.setId(id);
 		wineList = dao.query(wine);
@@ -31,23 +29,66 @@
 <c:set var="action" value="<%=action %>" />
 <c:set var="id" value="<%=id %>" />
 <c:set var="wineList" value="<%=wineList %>" />
+
+<style>
+.upload_cover {
+position: relative;
+/* width: 100px;
+height: 100px; */
+/* text-align: center; */
+cursor: pointer;
+/* background: #efefef;
+border: 1px solid #595656; */
+}
+#upload_input {
+display: none;
+}
+.upload_icon {
+font-weight: bold;
+font-size: 180%;
+position: absolute;
+left: -18px;
+    top: -9px;
+/* left: 0;
+width: 100%;
+top: 20%; */
+border:1px black solid;
+}
+.delAvatar {
+position: absolute;
+right: 2px;
+top: 2px;
+}
+</style>
 <div class="content">
-	<form id="form" action="../../WineServlet" method="post">
-	<input type="hidden" id="action" name="action" value="${action eq '新增' ? 'add' : 'update'}"/>
 		<div>
-			<div class="pageName">訂單${action }</div>
+			<div class="pageName">商品${action }</div>
 			<div class="search">
 				<table class="titleTable">
 					<tr>
+						<td style="height:50px">
+							<form id="uploadForm" action="../../uploadImg" enctype="multipart/form-data" method="post">
+								<label class="upload_cover">
+									<input type="file" name="uploadImg" id="upload_input">
+									<span class="upload_icon">➕</span>
+									<i class="delAvatar fa fa-times-circle-o" title="刪除"></i>
+								</label>
+							</form>
+						</td>
 						<td>
-							<label>訂單編號：${empty wineList[0].id ? id : wineList[0].id}</label>
+							<label>商品編號：<span>${empty wineList[0].id ? '' : wineList[0].id}</span></label>
 							<input type="hidden" id="id" name="id" value="${empty wineList[0].id ? id : wineList[0].id}"/>
 						</td>
+						<!-- <form id="uploadForm" action="../../Import" enctype="multipart/form-data" method="post">  -->
+							<!-- <input type="file" name="uploadXlsx" id="uploadXlsx"> -->
+						<!-- </form> -->
 					</tr>
-						
+				</table>
+			<!-- <form id="form" action="../../WineServlet" method="post"> -->
+				<table>
 					<tr>
 						<td>
-							<label>訂單狀態：</label>
+							<label>商品狀態：</label>
 							<input type="hidden" id="oldStatus" name="oldStatus" value="${wineList[0].status}">
 							<select id="status" name="status">
 								<option value="">=== 請選擇 ===</option>
@@ -61,7 +102,7 @@
 							</select>
 						</td>
 						<td>
-							<label>訂單總金額：<span>${empty wineList[0].total ? 0 : wineList[0].total}</span></label>
+							<label>商品總金額：<span>${empty wineList[0].total ? 0 : wineList[0].total}</span></label>
 							<input type="hidden" id="total" name="total" value="${empty wineList[0].total ? 0 : wineList[0].total}"/>
 						</td>
 					</tr>
@@ -99,81 +140,15 @@
 						</td>
 					</tr>
 				</table><!--queryForm !-->
+			<!-- </form> -->
 			</div>
 		</div><!--panel-->
-		<p/>
-		<div class="queryTitle">訂單明細&emsp;<input type="button" value="新增訂單明細" name="addDetail" id="addDetail"></div>
-		<div>
-			<table class="qTable" style="padding:0;">
-				<tr>
-					<th>商品名稱</th>
-					<th>單價</th>
-					<th>數量</th>
-					<th>單位</th>
-					<th>小記</th>
-					<th>刪除</th>
-				</tr>
-			    <tr id="tempRow" style="display: none;">
-			    	<td>
-						<select name="wineId">
-							<option value="">請選擇</option>
-							<c:forEach items="<%=wineDao.getWineList() %>" var="wine">
-								<option value="${wine.id}" price="${wine.price}">${wine.id} ${wine.chName}</option>
-							</c:forEach>
-						</select>
-					</td>
-					<td><input type="hidden" name="price" value="0"><span>0</span></td>
-					<td><input type="number" name="quantity" value="0" min="0" max="999"></td>
-					<td><input type="hidden" name="unit" value="瓶"><span>瓶</span></td>
-					<td><input type="hidden" name="subtotal" value="0"><span>0</span></td>
-					<td><input type="button" value="刪除" name="delete"></td>
-	    		</tr>
-	    		<c:choose>
-					<c:when test="${empty wineList[0].id}">
-						<tr>
-							<td>
-								<select name="wineId">
-									<option value="">請選擇</option>
-									<c:forEach items="<%=wineDao.getWineList() %>" var="wine">
-										<option value="${wine.id}" price="${wine.price}">${wine.id} ${wine.chName }</option>
-									</c:forEach>
-								</select>
-							</td>
-							<td><input type="hidden" name="price" value="0"><span>0</span></td>
-							<td><input type="number" name="quantity" value="0" min="0" max="999"></td>
-							<td><input type="hidden" name="unit" value="瓶"><span>瓶</span></td>
-							<td><input type="hidden" name="subtotal" value="0" ><span>0</span></td>
-							<td><input type="button" value="刪除" name="delete"></td>
-						</tr>
-					</c:when>
-					<c:otherwise>
-			    		<c:forEach items="${wineList[0].wineDetail}" var="detail">
-							<tr>
-								<td>
-									<select name="wineId">
-										<option value="">請選擇</option>
-										<c:forEach items="<%=wineDao.getWineList() %>" var="wine">
-											<option value="${wine.id}" price="${wine.price}" ${detail.wineId eq wine.id ? "selected" : "" }>${wine.id} ${wine.chName }</option>
-										</c:forEach>
-									</select>
-								</td>
-								<td><input type="hidden" name="price" value="${detail.price }"><span>${detail.price }</span></td>
-								<td><input type="number" name="quantity" value="${detail.quantity }" min="0" max="999"></td>
-								<td><input type="hidden" name="unit" value="${detail.unit }"><span>${detail.unit }</span></td>
-								<td><input type="hidden" name="subtotal" value="${detail.subtotal }"><span>${detail.subtotal }</span></td>
-								<td><input type="button" value="刪除" name="delete"></td>
-							</tr>
-			    		</c:forEach>
-					</c:otherwise>
-	    		</c:choose>
-			</table>
-		</div>
 		
 		<div class="footerButton">
+			<input type="hidden" id="action" name="action" value="${action eq '新增' ? 'add' : 'update'}"/>
 			<input type="button" value="確定${action }" name="add" id="add">
 			<input type="button" value="取消" name="cancel" id="cancel" >
 		</div>
-	</form>
 </div>
 
 <jsp:include page="footer.jsp"></jsp:include>

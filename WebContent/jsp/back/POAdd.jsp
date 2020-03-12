@@ -105,7 +105,7 @@
 		<div class="queryTitle">訂單明細&emsp;<input type="button" value="新增訂單明細" name="addDetail" id="addDetail"></div>
 		<div>
 			<table class="qTable" style="padding:0;">
-				<tr>
+				<tr class="titleTR">
 					<th>商品名稱</th>
 					<th>單價</th>
 					<th>數量</th>

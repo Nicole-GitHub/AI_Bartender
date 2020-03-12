@@ -28,41 +28,41 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelUtil {
-	CommonUtil common = new CommonUtil();
-	String tableName = "";
-	String sqlR = "";
-	String sqlU = "";
-	String sqlC = "";
-	String insKey = "";
-	String insVal = "";
-	String updateSet = "";
-	String id = "";
-	int rowCount = 0;
+	static CommonUtil comm = new CommonUtil();
+	static String tableName = "";
+	static String sqlR = "";
+	static String sqlU = "";
+	static String sqlC = "";
+	static String insKey = "";
+	static String insVal = "";
+	static String updateSet = "";
+	static String id = "";
+	static int rowCount = 0;
 
-	FileInputStream fis = null;
-	FileOutputStream fos = null;
-	Workbook workbook = null;
-	Sheet sheet = null;
+	static FileInputStream fis = null;
+	static FileOutputStream fos = null;
+	static Workbook workbook = null;
+	static Sheet sheet = null;
 
-	Connection conn = null;
-	ResultSet rs = null;
-	Statement st = null;
+	static Connection conn = null;
+	static ResultSet rs = null;
+	static Statement st = null;
 
-	public static void main(String[] args)
-			throws IOException, InvalidFormatException, ClassNotFoundException, SQLException {
-//		String filePath = "C:\\Users\\User\\22\\Create DB and TABLE\\"; // Windows 路徑
-		String filePath = "/Users/nicole/22/Create DB and TABLE/"; // Mac 路徑
-		new ExcelUtil().imp(filePath+"wine.xlsx");
-//		List<String> list = Arrays.asList("wine", "SommelierChoice"); // 要匯出的table名
-//		new ExcelUtil().exp(filePath + "wineOutput.xlsx", list);
-		System.out.println("done");
-	}
+//	public static void main(String[] args)
+//			throws IOException, InvalidFormatException, ClassNotFoundException, SQLException {
+////		String filePath = "C:\\Users\\User\\22\\Create DB and TABLE\\"; // Windows 路徑
+//		String filePath = "/Users/nicole/22/Create DB and TABLE/"; // Mac 路徑
+//		new ExcelUtil().imp(filePath+"wine.xlsx");
+////		List<String> list = Arrays.asList("wine", "SommelierChoice"); // 要匯出的table名
+////		new ExcelUtil().exp(filePath + "wineOutput.xlsx", list);
+//		System.out.println("done");
+//	}
 
 	public void imp(String file) throws IOException, InvalidFormatException, ClassNotFoundException, SQLException {
 
 		fis = new FileInputStream(file);
 		workbook = WorkbookFactory.create(fis);
-		conn = getConn();
+		conn = DBConn.getConn();
 		st = conn.createStatement();
 		int sheetCount = workbook.getNumberOfSheets();
 
@@ -86,7 +86,7 @@ public class ExcelUtil {
 						updateSet += sheet.getRow(0).getCell(c) + "='"
 								+ sheet.getRow(r).getCell(c).toString().replace("'", "''") + "',";
 					}
-					sqlU = "update " + tableName + " set " + RemoveLastWord(updateSet) + " where id = '" + id + "'";
+					sqlU = "update " + tableName + " set " + comm.delFinalWord(updateSet) + " where id = '" + id + "'";
 					System.out.println("sqlU = " + sqlU);
 					st.executeUpdate(sqlU);
 
@@ -98,8 +98,8 @@ public class ExcelUtil {
 						insKey += sheet.getRow(0).getCell(c) + ",";
 						insVal += "'" + sheet.getRow(r).getCell(c).toString().replace("'", "''") + "',";
 					}
-					sqlC = "insert into " + tableName + " (" + RemoveLastWord(insKey) + ")" + " values("
-							+ RemoveLastWord(insVal) + ")";
+					sqlC = "insert into " + tableName + " (" + comm.delFinalWord(insKey) + ")" + " values("
+							+ comm.delFinalWord(insVal) + ")";
 					System.out.println("sqlC = " + sqlC);
 					st.executeUpdate(sqlC);
 
@@ -115,13 +115,13 @@ public class ExcelUtil {
 
 	public void exp(String file, List<String> list) throws ClassNotFoundException, SQLException, IOException {
 
-		conn = getConn();
 		workbook = new XSSFWorkbook();
 		Row row = null;
 		Cell cell = null;
 
 		for (String str : list) {
 			sqlR = "select * from " + str;
+			conn = DBConn.getConn();
 			st = conn.createStatement();
 			rs = st.executeQuery(sqlR);
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -181,18 +181,4 @@ public class ExcelUtil {
 		
 	}
 
-	private Connection getConn() throws ClassNotFoundException, SQLException {
-		Properties properties = new PropertiesUtil().getProperties();
-		String url = properties.getProperty("url");
-		String id = properties.getProperty("username");
-		String password = properties.getProperty("password");
-		String driver = properties.getProperty("driver");
-
-		Class.forName(driver);
-		return DriverManager.getConnection(url, id, password);
-	}
-
-	private String RemoveLastWord(String str) {
-		return str.substring(0, str.length() - 1);
-	}
 }

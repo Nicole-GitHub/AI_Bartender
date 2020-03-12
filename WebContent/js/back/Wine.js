@@ -44,7 +44,6 @@ $(document).ready(function() {
 	$("input[name=del]").click(function() {
         var common = new Object();
 		common.action = "del";
-		console.log("del");
 
         $.post("../../WineServlet",
         		{
@@ -75,46 +74,19 @@ $(document).ready(function() {
 		$("#pageNum").val(++pageNum);
 		$("#queryForm").submit();
 	});
-
+	
 	//從Excel匯入
-	$("#import").click(function(){
-		$.post("../../Import",{},function(rs){
-			if(rs == "ok")
-				alert("匯入成功");
-			else
-				alert("匯入失敗");
-		});
-	});
-	//匯出至Excel
-	$("#export").click(function(){
-//		exportReport();
-		$.post("../../Export",{},function(rs,i,e){
-			alert("匯出成功");
-			console.log(i);
-			console.log(e);
-//			if(rs == "")
-//				alert("匯出成功");
-//			else
-//				alert("匯出失敗:"+rs);
-		});
+	$("#uploadXlsx").change(function(){
+		$("#uploadForm").submit();
 	});
 	
-	 
-	function exportReport(){
-		url="../../Export";
-		document.cookie = "fileDownload=true; path=/";
-		$.fileDownload(url, {
-			//preparingMessageHtml: "處理中",
-			failMessageHtml : "執行失敗",
-			httpMethod : "GET",
-			prepareCallback: function(url) {
-				alert("prepareCallback");
-			},
-			successCallback: function (url) {},
-			data : ""
-		}).done(function() {
-			alert("done");
-		});
-	}
-	 
+	//匯出至Excel
+	$("#export").click(function(){
+		location.href="../../Export";
+	});
+	
+	//下載匯入商品資訊範例檔
+	$("#getSample").click(function(){
+		location.href="../../Download";
+	});
 });
