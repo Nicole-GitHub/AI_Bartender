@@ -9,7 +9,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <jsp:include page="header.jsp"></jsp:include>
 <link rel="stylesheet" href="../../css/back/PO.css" />
-<script src="../../js/PODetail.js"></script>
+<script src="../../js/back/PODetail.js"></script>
 <%
 	int pageNum = new CommonUtil().StringToInt(request.getParameter("pageNum"));
 	if(pageNum < 0) pageNum = 0;

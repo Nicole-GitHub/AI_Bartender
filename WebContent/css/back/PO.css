@@ -48,7 +48,10 @@
 	height:45px;
 }
 
-.qTable tr:first-child{
+.qTable table tr{
+	height:auto !important;
+}
+.qTable .titleTR{
     background-color: #393332;
 }
 .qTable th {
@@ -58,6 +61,11 @@
 
 .qTable td{
 	border-top:0.5px #898989a6 solid;
+}
+
+.qTable table td{
+	border-top:0;
+	text-align: left;
 }
 
 /* ================================== eTable ========================================= */
@@ -96,6 +104,7 @@
 /* =========================================================================== */
 
 input[type="button"] {
+	margin: 1vh;
 	font-size: 12pt;
     cursor: pointer;
     color: #fff;
@@ -110,6 +119,7 @@ input[type="button"] {
     clear:both;
 }
 #pre , #next , #page {
+	margin: 0;
 	width: 20px;
     height: 20px;
     padding:0;

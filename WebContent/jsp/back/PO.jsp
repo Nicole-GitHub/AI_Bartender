@@ -25,10 +25,10 @@
 <c:set var="poList" value="<%=dao.query(po)  %>" />
 <jsp:include page="header.jsp"/>
 <link rel="stylesheet" href="../../css/back/PO.css" />
-<script src="../../js/PO.js"></script>
+<script src="../../js/back/PO.js"></script>
 	<div class="content">
 		<div>
-			<div class="pageName">訂單處理與查詢</div>
+			<div class="pageName">訂單查詢</div>
 			<div class="search">
 				<form id="searchForm" action="PO.jsp" method="post">
 					<table class="titleTable">
@@ -75,7 +75,7 @@
 			<input id="action" name="action" type="hidden">
 			<input id="pageNum" name="pageNum" type="hidden" value="<%=pageNum%>">
 			<table class="qTable">
-				<tr>
+				<tr class="titleTR">
 					<th>訂單編號</th>
 					<th>訂購人</th>
 					<th>狀態</th>

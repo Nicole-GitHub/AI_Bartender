@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import model.Common;
 import model.Wine;
 import util.CommonUtil;
 import util.DBConn;
@@ -15,14 +16,224 @@ import util.DateUtil;
 import view.PODetailV;
 
 public class WineDao {
+
 	static String sql;
 	static final String table = "Wine";
-	static boolean b;
+	static boolean b; 
 	static final CommonUtil comm = new CommonUtil();
 	static final DateUtil date = new DateUtil();
 	static final Connection conn = DBConn.getConn();
 	static PreparedStatement ps = null;
 	static ResultSet rs = null;
+	static int paramIndex = 1;
+
+	public boolean update(Wine wine, Common common) {
+
+		if (common.getAction().equals("add")) {
+			sql = "insert into " + table + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate(),?,sysdate())";
+		} else {
+			sql = "update " + table + " set enName = ?, chName = ?, type = ?,"
+					+ " percent = ?, ml = ?, price = ?, unit = ?, place = ?, grape = ?,"
+					+ " feature = ?, status = ?, imgPath = ?,"
+					+ " updateUser = ? , updateTime = sysdate() where id = ? ";
+		}
+		
+		try {
+			if (common.getAction().equals("add")) {
+				ps = conn.prepareStatement(sql);
+				ps.setString(paramIndex++, wine.getId());
+				ps.setString(paramIndex++, wine.getEnName());
+				ps.setString(paramIndex++, wine.getChName());
+				ps.setNString(paramIndex++, wine.getType());
+				ps.setDouble(paramIndex++, wine.getPercent());
+				ps.setInt(paramIndex++, wine.getMl());
+				ps.setInt(paramIndex++, wine.getPrice());
+				ps.setNString(paramIndex++, wine.getUnit());
+				ps.setNString(paramIndex++, wine.getPlace());
+				ps.setNString(paramIndex++, wine.getGrape());
+				ps.setNString(paramIndex++, wine.getFeature());
+				ps.setNString(paramIndex++, wine.getStatus());
+				ps.setNString(paramIndex++, wine.getImgPath());
+				ps.setString(paramIndex++, wine.getCreateUser());
+				ps.setString(paramIndex++, wine.getUpdateUser());
+				b = ps.executeUpdate() > 0;
+			} else if (common.getAction().equals("update")) {
+				paramIndex = 1;
+				ps = conn.prepareStatement(sql);
+				ps.setString(paramIndex++, wine.getEnName());
+				ps.setString(paramIndex++, wine.getChName());
+				ps.setNString(paramIndex++, wine.getType());
+				ps.setDouble(paramIndex++, wine.getPercent());
+				ps.setInt(paramIndex++, wine.getMl());
+				ps.setInt(paramIndex++, wine.getPrice());
+				ps.setNString(paramIndex++, wine.getUnit());
+				ps.setNString(paramIndex++, wine.getPlace());
+				ps.setNString(paramIndex++, wine.getGrape());
+				ps.setNString(paramIndex++, wine.getFeature());
+				ps.setNString(paramIndex++, wine.getStatus());
+				ps.setNString(paramIndex++, wine.getImgPath());
+				ps.setString(paramIndex++, wine.getUpdateUser());
+				ps.setString(paramIndex++, wine.getId());
+				b = ps.executeUpdate() > 0;
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+
+		return b;
+	}
+
+	public boolean del(Wine wine) {
+		sql = "delete from " + table + " where id = ? ";
+
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, wine.getId());
+			b = ps.executeUpdate() > 0;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		
+		return b;
+	}
+	
+	/**
+	 * 查詢
+	 * 	後端 商品管理 查詢頁 wine = null
+	 * 	後端 商品管理 明細頁/更新頁 wine 有 id
+	 * 	後端 商品管理 查詢頁搜尋 wine 有查詢條件的欄位值
+	 * 	前端 查歷史詢問單 wine 有 owner
+	 * 
+	 * @param wine
+	 * @return
+	 */
+	public ArrayList<Wine> query(Wine wine) {
+		sql = "select * from " + table + " where 1=1";
+		boolean wineIsNotNull = wine != null && !comm.getString(wine.getId()).equals("");
+		
+		//進入訂單明細頁所需
+		if (wineIsNotNull && !comm.getString(wine.getId()).equals("")) {
+			sql += " and id = '" + wine.getId() + "'";
+			
+		}
+		
+		//搜尋條件
+		if(!comm.getString(wine.getChName()).equals("")) {
+			sql += " and chName like ? ";
+		}
+		if(!comm.getString(wine.getEnName()).equals("")) {
+			sql += " and enName like ? ";
+		}
+		if(!comm.getString(wine.getStatus()).equals("")) {
+			sql += " and status = ?";
+		}
+		if(!comm.getString(wine.getPlace()).equals("")) {
+			sql += " and place = ?";
+		}
+		if(!comm.getString(wine.getType()).equals("")) {
+			sql += " and type = ?";
+		}
+		if(!comm.getString(wine.getGrape()).equals("")) {
+			sql += " and grape like ? ";
+		}
+		
+		sql += " order by id ;";
+		System.out.println("sql =" + sql);
+		ArrayList<Wine> arr = new ArrayList<Wine>();
+		Wine rsWine = null;
+		try {
+			Connection conn = DBConn.getConn();
+			ps = conn.prepareStatement(sql);
+			int parameterIndex = 1;
+			//搜尋條件
+			if(!comm.getString(wine.getChName()).equals("")) {
+				ps.setNString(parameterIndex++, "%"+wine.getChName()+"%");
+			}
+			if(!comm.getString(wine.getEnName()).equals("")) {
+				ps.setNString(parameterIndex++, "%"+wine.getEnName()+"%");
+			}
+			if(!comm.getString(wine.getStatus()).equals("")) {
+				ps.setNString(parameterIndex++, wine.getStatus());
+			}
+			if(!comm.getString(wine.getPlace()).equals("")) {
+				ps.setNString(parameterIndex++, wine.getPlace());
+			}
+			if(!comm.getString(wine.getType()).equals("")) {
+				ps.setNString(parameterIndex++, wine.getType());
+			}
+			if(!comm.getString(wine.getGrape()).equals("")) {
+				ps.setNString(parameterIndex++, "%"+wine.getGrape()+"%");
+			}
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				rsWine = new Wine();
+				rsWine.setId(rs.getString("id"));
+				rsWine.setEnName(rs.getString("enName"));
+				rsWine.setChName(rs.getString("chName"));
+				rsWine.setPlace(rs.getString("place"));
+				rsWine.setType(rs.getString("type"));
+				rsWine.setPrice(rs.getInt("price"));
+				rsWine.setPercent(rs.getDouble("percent"));
+				rsWine.setMl(rs.getInt("ml"));
+				rsWine.setUnit(rs.getString("unit"));
+				rsWine.setGrape(rs.getString("grape"));
+				rsWine.setFeature(rs.getString("feature"));
+				rsWine.setStatus(rs.getString("status"));
+				rsWine.setImgPath(rs.getString("imgPath"));
+				rsWine.setCreateUser(rs.getString("createUser"));
+				rsWine.setCreateTime(rs.getString("createTime"));
+				rsWine.setUpdateUser(rs.getString("updateUser"));
+				rsWine.setUpdateTime(rs.getString("updateTime"));
+				arr.add(rsWine);
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+
+		return arr;
+	}
+
+	/**
+	 * 取wine的id
+	 * 
+	 * @return
+	 */
+	public String getId(String str) {
+		str = str.substring(0,2);
+//		System.out.println(now);
+		sql = "select max(id) id from " + table + " where  id like '" + str + "%'";
+		String id = "";
+
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				id = comm.getString(rs.getString("id"));
+				if (id.isEmpty()) {
+					id = "1001";
+				} else {
+					id = String.valueOf(Integer.parseInt(id.substring(2)) + 1);
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+
+		return id.toString();
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//========================================================================
+	
 
 	/**
 	 * 列出wine的所有項目

@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <jsp:include page="header.jsp"></jsp:include>
 <link rel="stylesheet" href="../../css/back/PO.css" />
-<script src="../../js/POAdd.js"></script>
+<script src="../../js/back/POAdd.js"></script>
 <%
 	PODao dao = new PODao();
 	WineDao wineDao = new WineDao();

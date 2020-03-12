@@ -24,7 +24,7 @@
        <div class="body">
 			<div class="nav">
 				<p><a href="PO.jsp">訂單管理</a></p>
-				<p><a href="PO.jsp">商品管理</a></p>
+				<p><a href="Wine.jsp">商品管理</a></p>
 				<p><a href="PO.jsp">會員管理</a></p>
 			</div>
 			<div class="bodyRight">
