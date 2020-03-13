@@ -17,7 +17,7 @@ import view.PODetailV;
 
 public class WineDao {
 
-	static String sql;
+	 String sql;
 	static final String table = "Wine";
 	static boolean b; 
 	static final CommonUtil comm = new CommonUtil();
@@ -30,7 +30,7 @@ public class WineDao {
 	public boolean update(Wine wine, Common common) {
 
 		if (common.getAction().equals("add")) {
-			sql = "insert into " + table + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,sysdate(),?,sysdate())";
+			sql = "insert into " + table + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,'admin',sysdate(),'admin',sysdate())";
 		} else {
 			sql = "update " + table + " set enName = ?, chName = ?, type = ?,"
 					+ " percent = ?, ml = ?, price = ?, unit = ?, place = ?, grape = ?,"
@@ -40,8 +40,9 @@ public class WineDao {
 		
 		try {
 			if (common.getAction().equals("add")) {
+				paramIndex = 1;
 				ps = conn.prepareStatement(sql);
-				ps.setString(paramIndex++, wine.getId());
+				ps.setString(paramIndex++, getId(wine.getPlace()));
 				ps.setString(paramIndex++, wine.getEnName());
 				ps.setString(paramIndex++, wine.getChName());
 				ps.setNString(paramIndex++, wine.getType());
@@ -54,8 +55,6 @@ public class WineDao {
 				ps.setNString(paramIndex++, wine.getFeature());
 				ps.setNString(paramIndex++, wine.getStatus());
 				ps.setNString(paramIndex++, wine.getImgPath());
-				ps.setString(paramIndex++, wine.getCreateUser());
-				ps.setString(paramIndex++, wine.getUpdateUser());
 				b = ps.executeUpdate() > 0;
 			} else if (common.getAction().equals("update")) {
 				paramIndex = 1;
@@ -72,7 +71,7 @@ public class WineDao {
 				ps.setNString(paramIndex++, wine.getFeature());
 				ps.setNString(paramIndex++, wine.getStatus());
 				ps.setNString(paramIndex++, wine.getImgPath());
-				ps.setString(paramIndex++, wine.getUpdateUser());
+				ps.setString(paramIndex++, "admin");
 				ps.setString(paramIndex++, wine.getId());
 				b = ps.executeUpdate() > 0;
 			}
@@ -114,7 +113,6 @@ public class WineDao {
 		//進入訂單明細頁所需
 		if (wineIsNotNull && !comm.getString(wine.getId()).equals("")) {
 			sql += " and id = '" + wine.getId() + "'";
-			
 		}
 		
 		//搜尋條件
@@ -144,25 +142,25 @@ public class WineDao {
 		try {
 			Connection conn = DBConn.getConn();
 			ps = conn.prepareStatement(sql);
-			int parameterIndex = 1;
+			paramIndex = 1;
 			//搜尋條件
 			if(!comm.getString(wine.getChName()).equals("")) {
-				ps.setNString(parameterIndex++, "%"+wine.getChName()+"%");
+				ps.setNString(paramIndex++, "%"+wine.getChName()+"%");
 			}
 			if(!comm.getString(wine.getEnName()).equals("")) {
-				ps.setNString(parameterIndex++, "%"+wine.getEnName()+"%");
+				ps.setNString(paramIndex++, "%"+wine.getEnName()+"%");
 			}
 			if(!comm.getString(wine.getStatus()).equals("")) {
-				ps.setNString(parameterIndex++, wine.getStatus());
+				ps.setNString(paramIndex++, wine.getStatus());
 			}
 			if(!comm.getString(wine.getPlace()).equals("")) {
-				ps.setNString(parameterIndex++, wine.getPlace());
+				ps.setNString(paramIndex++, wine.getPlace());
 			}
 			if(!comm.getString(wine.getType()).equals("")) {
-				ps.setNString(parameterIndex++, wine.getType());
+				ps.setNString(paramIndex++, wine.getType());
 			}
 			if(!comm.getString(wine.getGrape()).equals("")) {
-				ps.setNString(parameterIndex++, "%"+wine.getGrape()+"%");
+				ps.setNString(paramIndex++, "%"+wine.getGrape()+"%");
 			}
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -201,11 +199,11 @@ public class WineDao {
 	public String getId(String str) {
 		str = str.substring(0,2);
 //		System.out.println(now);
-		sql = "select max(id) id from " + table + " where  id like '" + str + "%'";
+		String sql = "select max(id) id from " + table + " where  id like '" + str + "%'";
 		String id = "";
 
 		try {
-			ps = conn.prepareStatement(sql);
+			PreparedStatement ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				id = comm.getString(rs.getString("id"));
@@ -219,7 +217,7 @@ public class WineDao {
 			System.out.println(e);
 		}
 
-		return id.toString();
+		return str.toUpperCase()+id;
 	}
 
 	

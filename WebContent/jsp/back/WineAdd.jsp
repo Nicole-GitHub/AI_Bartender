@@ -7,7 +7,8 @@
 	import="java.util.ArrayList" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <jsp:include page="header.jsp"/>
-<link rel="stylesheet" href="../../css/back/Wine.css" />
+<link rel="stylesheet" href="../../css/back/PO.css" />
+<link rel="stylesheet" href="../../css/back/WineAdd_b3.css" />
 <script src="../../js/back/WineAdd.js"></script>
 <%
 	WineDao dao = new WineDao();
@@ -30,125 +31,108 @@
 <c:set var="id" value="<%=id %>" />
 <c:set var="wineList" value="<%=wineList %>" />
 
-<style>
-.upload_cover {
-position: relative;
-/* width: 100px;
-height: 100px; */
-/* text-align: center; */
-cursor: pointer;
-/* background: #efefef;
-border: 1px solid #595656; */
-}
-#upload_input {
-display: none;
-}
-.upload_icon {
-font-weight: bold;
-font-size: 180%;
-position: absolute;
-left: -18px;
-    top: -9px;
-/* left: 0;
-width: 100%;
-top: 20%; */
-border:1px black solid;
-}
-.delAvatar {
-position: absolute;
-right: 2px;
-top: 2px;
-}
-</style>
 <div class="content">
-		<div>
-			<div class="pageName">商品${action }</div>
-			<div class="search">
-				<table class="titleTable">
+	<div>
+		<div class="pageName">商品${action }</div>
+		<div class="addContent">
+			<form id="form" action="../../WineServlet" enctype="multipart/form-data" method="post">
+				<table class="contentTable">
 					<tr>
-						<td style="height:50px">
-							<form id="uploadForm" action="../../uploadImg" enctype="multipart/form-data" method="post">
-								<label class="upload_cover">
-									<input type="file" name="uploadImg" id="upload_input">
-									<span class="upload_icon">➕</span>
-									<i class="delAvatar fa fa-times-circle-o" title="刪除"></i>
-								</label>
-							</form>
-						</td>
-						<td>
-							<label>商品編號：<span>${empty wineList[0].id ? '' : wineList[0].id}</span></label>
+						<td width="15%"><label>商品編號：</label></td>
+						<td width="35%">
+							<span>${empty wineList[0].id ? '' : wineList[0].id}</span>
 							<input type="hidden" id="id" name="id" value="${empty wineList[0].id ? id : wineList[0].id}"/>
 						</td>
-						<!-- <form id="uploadForm" action="../../Import" enctype="multipart/form-data" method="post">  -->
-							<!-- <input type="file" name="uploadXlsx" id="uploadXlsx"> -->
-						<!-- </form> -->
+						<td colspan="2">
+							<div><img src="../../${wineList[0].imgPath }" width="50px"></div>
+							<input type="file" name="imgPath" id="imgPath" value="123">
+						</td>
 					</tr>
-				</table>
-			<!-- <form id="form" action="../../WineServlet" method="post"> -->
-				<table>
 					<tr>
+						<td width="15%"><label>英文名稱：</label></td>
+						<td colspan="3">
+							<input type="text" id="enName" name="enName" size="60" value="${empty wineList[0].enName ? '' : wineList[0].enName}">
+						</td>
+					</tr>
+					<tr>
+						<td width="15%"><label>中文名稱：</label></td>
+						<td colspan="3">
+							<input type="text" id="chName" name="chName" size="60" value="${empty wineList[0].chName ? '' : wineList[0].chName}">
+						</td>
+					</tr>
+					<tr>
+						<td><label>品種：</label></td>
+						<td colspan="3">
+							<input type="text" id="grape" name="grape" size="40" value="${empty wineList[0].grape ? '' : wineList[0].grape}">
+						</td>
+					</tr>
+					<tr>
+						<td><label>酒種：</label></td>
 						<td>
-							<label>商品狀態：</label>
-							<input type="hidden" id="oldStatus" name="oldStatus" value="${wineList[0].status}">
-							<select id="status" name="status">
+							<select id="type" name="type">
 								<option value="">=== 請選擇 ===</option>
-								<option value="等待專員聯繫" ${wineList[0].status eq '等待專員聯繫' ? 'selected' : '' }>等待專員聯繫</option>
-								<option value="訂購成功" ${wineList[0].status eq '訂購成功' ? 'selected' : '' }>訂購成功</option>
-								<option value="撿貨中" ${wineList[0].status eq '撿貨中' ? 'selected' : '' }>撿貨中</option>
-								<option value="理貨中" ${wineList[0].status eq '理貨中' ? 'selected' : '' }>理貨中</option>
-								<option value="已出貨" ${wineList[0].status eq '已出貨' ? 'selected' : '' }>已出貨</option>
-								<option value="已完成" ${wineList[0].status eq '已完成' ? 'selected' : '' }>已完成</option>
-								<option value="已取消" ${wineList[0].status eq '已取消' ? 'selected' : '' }>已取消</option>
+								<option value="紅酒" ${wineList[0].type eq '紅酒' ? 'selected' : '' }>紅酒</option>
+								<option value="白酒" ${wineList[0].type eq '白酒' ? 'selected' : '' }>白酒</option>
 							</select>
 						</td>
+						<td><label>產地：</label></td>
 						<td>
-							<label>商品總金額：<span>${empty wineList[0].total ? 0 : wineList[0].total}</span></label>
-							<input type="hidden" id="total" name="total" value="${empty wineList[0].total ? 0 : wineList[0].total}"/>
+							<select id="place" name="place">
+								<option value="">=== 請選擇 ===</option>
+								<option value="Australia" ${wineList[0].place eq 'Australia' ? 'selected' : '' }>Australia</option>
+								<option value="Chlie" ${wineList[0].place eq 'Chlie' ? 'selected' : '' }>Chlie</option>
+								<option value="France" ${wineList[0].place eq 'France' ? 'selected' : '' }>France</option>
+								<option value="USA" ${wineList[0].place eq 'USA' ? 'selected' : '' }>USA</option>
+							</select>
 						</td>
 					</tr>
 					<tr>
+						<td><label>酒精濃度：</label></td>
 						<td>
-							<label>物流編號：</label>
-							<input type="text" id="freightId" name="freightId" value="${empty wineList[0].freightId ? '' : wineList[0].freightId}">
+							<input type="number" id="percent" name="percent" max=100 min=0 value="${empty wineList[0].percent ? 0 : wineList[0].percent}">
 						</td>
+						<td><label>容量：</label></td>
 						<td>
-							<label>貨運商名稱：</label>
-							<input type="text" id="freightName" name="freightName" value="${empty wineList[0].freightName ? '' : wineList[0].freightName}">
+							<input type="number" id="ml" name="ml" max=1000 min=0 value="${empty wineList[0].ml ? 0 : wineList[0].ml}">
 						</td>
 					</tr>
-					
 					<tr>
+						<td><label>銷售單位：</label></td>
 						<td>
-							<label>訂購人：</label>
-							<c:choose >
-							 <c:when test="${empty wineList[0].owner}">
-								<select id="owner" name="owner">
-									<option value="">=== 請選擇 ===</option>
-									<c:forEach items="<%=new UsersDao().getUsersList() %>" var="user">
-										<option value="${user.email}" ${wineList[0].owner eq user.email ? "selected" : ""}>${user.name} (${user.email})</option>
-									</c:forEach>
-								</select>
-							 </c:when>
-							 <c:otherwise>
-							 	<input type="hidden" id="owner" name="owner" value="${wineList[0].owner}" >${wineList[0].owner}
-							 </c:otherwise>
-							</c:choose>
+							<input type="text" id="unit" name="unit" size="5" value="${empty wineList[0].unit ? '' : wineList[0].unit}">
 						</td>
+						<td><label>價格：</label></td>
 						<td>
-							<label>${action }人員： admin</label>
-							<input type="hidden" id="${action eq '新增' ? 'createUser' : 'updateUser' }" name="${action eq '新增' ? 'createUser' : 'updateUser' }" value="admin">
+							<input type="number" id="price" name="price" max=999999999 min=0 value="${empty wineList[0].price ? 0 : wineList[0].price}">
 						</td>
 					</tr>
-				</table><!--queryForm !-->
-			<!-- </form> -->
-			</div>
-		</div><!--panel-->
-		
-		<div class="footerButton">
-			<input type="hidden" id="action" name="action" value="${action eq '新增' ? 'add' : 'update'}"/>
-			<input type="button" value="確定${action }" name="add" id="add">
-			<input type="button" value="取消" name="cancel" id="cancel" >
+					<tr>
+						<td><label>商品狀態：</label></td>
+						<td colspan="3">
+							<select id="status" name="status">
+								<option value="">=== 請選擇 ===</option>
+								<option value="已上架" ${wineList[0].status eq '已上架' ? 'selected' : '' }>已上架</option>
+								<option value="已下架" ${wineList[0].status eq '已下架' ? 'selected' : '' }>已下架</option>
+								<option value="完售" ${wineList[0].status eq '完售' ? 'selected' : '' }>完售</option>
+								<option value="缺貨" ${wineList[0].status eq '缺貨' ? 'selected' : '' }>缺貨</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><label>特色：</label></td>
+						<td colspan="3">
+							<textarea rows="5" cols="60" id="feature" name="feature">123${empty wineList[0].feature ? '' : wineList[0].feature}</textarea>
+						</td>
+					</tr>
+				</table>
+				<div class="footerButton">
+					<input type="hidden" id="action" name="action" value="${action eq '新增' ? 'add' : 'update'}"/>
+					<input type="button" value="確定${action }" name="add" id="add">
+					<input type="button" value="取消" name="cancel" id="cancel" >
+				</div>
+			</form>
 		</div>
+	</div>
 </div>
 
 <jsp:include page="footer.jsp"></jsp:include>

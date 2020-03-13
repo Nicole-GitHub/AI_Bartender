@@ -42,13 +42,10 @@ $(document).ready(function() {
 	
 	//刪除
 	$("input[name=del]").click(function() {
-        var common = new Object();
-		common.action = "del";
-
         $.post("../../WineServlet",
         		{
         	"id":$(this).attr("uuid"),
-        	"common":JSON.stringify(common)
+        	"action":"del"
         	},function(rs){
 			console.log(rs);
 			if(rs == "ok"){

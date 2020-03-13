@@ -42,8 +42,7 @@ public class Import extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		
 		String rs = "fail";
     	FileUtil fileUtil = new FileUtil();
 
@@ -57,7 +56,7 @@ public class Import extends HttpServlet {
 		try {
 			if(filename != null) {
 
-				fileUtil.writeTo(tempFilePath,filename, part);
+				fileUtil.writeTo(tempFilePath, part);
 				new ExcelUtil().imp(tempFilePath);
 				rs = "ok";
 			}

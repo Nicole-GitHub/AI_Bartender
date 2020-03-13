@@ -2,10 +2,12 @@ package servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 
@@ -13,10 +15,13 @@ import dao.WineDao;
 import model.Common;
 import model.Wine;
 import util.CommonUtil;
+import util.ExcelUtil;
+import util.FileUtil;
 
 /**
  * Servlet implementation class WineServlet
  */
+@MultipartConfig
 @WebServlet("/WineServlet")
 public class WineServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -24,48 +29,56 @@ public class WineServlet extends HttpServlet {
 	public WineServlet() {
 		super();
 	}
-	public void Json2Entity(Wine wine){
-    	System.out.println("================== Wine =====================");
-		System.out.println(wine.getId());
-    	System.out.println(wine.getStatus());
-    	System.out.println(wine.getCreateUser());
-    	System.out.println(wine.getCreateTime());
-    	System.out.println(wine.getUpdateUser());
-    	System.out.println(wine.getUpdateTime());
-    	
-    }
 	
-
-	public void Json2Entity(Common common){
-    	System.out.println("================== Common =====================");
-		
-    	System.out.println(common.getAction());
-    	System.out.println(common.getPageNum());
-    }
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
+		req.setCharacterEncoding("UTF8");
 		CommonUtil comm = new CommonUtil();
-        Gson g=new Gson();
 		WineDao dao = new WineDao();
+		Common common = new Common();
 		Wine wine = new Wine();
-		System.out.println(request.getParameter("wine"));
-        Common common = g.fromJson(request.getParameter("common"), Common.class);
-        String id = comm.getString(request.getParameter("id"));
-        Json2Entity(common);
+
+    	wine.setId(comm.getString(req.getParameter("id")));
+    	wine.setEnName(comm.getString(req.getParameter("enName")));
+    	wine.setChName(comm.getString(req.getParameter("chName")));
+    	wine.setType(comm.getString(req.getParameter("type")));
+    	wine.setPercent(comm.StringToDouble(req.getParameter("percent")));
+    	wine.setMl(comm.StringToInt(req.getParameter("ml")));
+    	wine.setPrice(comm.StringToInt(req.getParameter("price")));
+    	wine.setUnit(comm.getString(req.getParameter("unit")));
+    	wine.setPlace(comm.getString(req.getParameter("place")));
+    	wine.setGrape(comm.getString(req.getParameter("grape")));
+    	wine.setFeature(comm.getString(req.getParameter("feature")));
+    	wine.setStatus(comm.getString(req.getParameter("status")));
+    	common.setAction(comm.getString(req.getParameter("action")));
 		boolean b = false;
 		
-		if (common.getAction().equals("del") && !comm.isBlank(id)) {
-			wine.setId(id);
+		
+		if (common.getAction().equals("del") && !comm.isBlank(wine.getId())) {
+			wine.setId(wine.getId());
 			b = dao.del(wine);
+			res.getWriter().print("ok");
 		}else if(!common.getAction().equals("del")) {
-	        wine = g.fromJson(request.getParameter("wine"), Wine.class);
-	        Json2Entity(wine);
+
+			FileUtil fileUtil = new FileUtil();
+
+	    	Part part = req.getPart("imgPath");
+			System.out.println(part);
+			
+			String filename = fileUtil.getFilename(part);
+	    	wine.setImgPath(filename);
+			System.out.println("newFilename="+filename);
+			String tempFilePath = getServletContext().getRealPath("/")+filename;		
+
+			if(filename != null) {
+				fileUtil.writeTo(tempFilePath, part);
+			}
 			b = dao.update(wine,common);
+			res.sendRedirect("jsp/back/Wine.jsp");
 		}else {
 			System.out.println("Error: 刪除時id不可為空");
 		}
-		if(b) response.getWriter().print("ok");
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

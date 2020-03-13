@@ -30,10 +30,10 @@ public class FileUtil {
         if(filename.equals("")) {
         	return null;
         }
-        String newfilename = "upload/"+filename+"";
+        String newfilename = "imgs/"+filename+"";
         return newfilename;
     }
-	public void writeTo(String tempFilePath , String filename, Part part) throws IOException,
+	public void writeTo(String tempFilePath, Part part) throws IOException,
             FileNotFoundException {
         InputStream in = part.getInputStream();
         OutputStream out = new FileOutputStream(tempFilePath);
