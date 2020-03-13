@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+.content .addContent{
+	margin: 4% 0;
+    float: left;
+    font-size: 12pt;
+	min-width: 640px;
+    width: 75%;
+}
+
+.contentTable tr td:nth-child(1),
+.contentTable tr td:nth-child(3){
+	width: 20%;
+	text-align: right;
+	vertical-align: top;
+}
+.contentTable tr td:nth-child(2),
+.contentTable tr td:nth-child(4){
+	width: 30%;
+	text-align: left;
+	vertical-align: top;
+}
