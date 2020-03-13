@@ -38,7 +38,7 @@ public class Download extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Properties prop = new PropertiesUtil().getProperties();
-		String filePath = getServletContext().getRealPath(File.separator)+prop.getProperty("wineSampleFilePath");
+		String filePath = getServletContext().getRealPath(File.separator)+File.separator+prop.getProperty("wineSampleFilePath");
 		String fileName = prop.getProperty("wineSampleFileName");
 		String fileFullPath = filePath+fileName;
 		

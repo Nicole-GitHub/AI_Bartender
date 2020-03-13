@@ -37,37 +37,40 @@
 		<div class="addContent">
 			<form id="form" action="../../WineServlet" enctype="multipart/form-data" method="post">
 				<table class="contentTable">
+					
 					<tr>
-						<td width="15%"><label>商品編號：</label></td>
-						<td width="35%">
-							<span>${empty wineList[0].id ? '' : wineList[0].id}</span>
-							<input type="hidden" id="id" name="id" value="${empty wineList[0].id ? id : wineList[0].id}"/>
-						</td>
-						<td colspan="2">
-							<div><img src="../../${wineList[0].imgPath }" width="50px"></div>
-							<input type="file" name="imgPath" id="imgPath" value="123">
+						<td rowspan=10>
+							<div><img src="../../${wineList[0].imgPath }" width="300px"></div>
+							<span style="font-weight: bold;color: red;">上傳商品圖片</span><input type="file" name="imgPath" id="imgPath">
 						</td>
 					</tr>
 					<tr>
-						<td width="15%"><label>英文名稱：</label></td>
+						<th><label>商品編號：</label></th>
+						<td colspan="3">
+							<span>${empty wineList[0].id ? '' : wineList[0].id}</span>
+							<input type="hidden" id="id" name="id" value="${empty wineList[0].id ? id : wineList[0].id}"/>
+						</td>
+					</tr>
+					<tr>
+						<th><label>英文名稱：</label></th>
 						<td colspan="3">
 							<input type="text" id="enName" name="enName" size="60" value="${empty wineList[0].enName ? '' : wineList[0].enName}">
 						</td>
 					</tr>
 					<tr>
-						<td width="15%"><label>中文名稱：</label></td>
+						<th><label>中文名稱：</label></th>
 						<td colspan="3">
 							<input type="text" id="chName" name="chName" size="60" value="${empty wineList[0].chName ? '' : wineList[0].chName}">
 						</td>
 					</tr>
 					<tr>
-						<td><label>品種：</label></td>
+						<th><label>品種：</label></th>
 						<td colspan="3">
 							<input type="text" id="grape" name="grape" size="40" value="${empty wineList[0].grape ? '' : wineList[0].grape}">
 						</td>
 					</tr>
 					<tr>
-						<td><label>酒種：</label></td>
+						<th><label>酒種：</label></th>
 						<td>
 							<select id="type" name="type">
 								<option value="">=== 請選擇 ===</option>
@@ -75,7 +78,7 @@
 								<option value="白酒" ${wineList[0].type eq '白酒' ? 'selected' : '' }>白酒</option>
 							</select>
 						</td>
-						<td><label>產地：</label></td>
+						<th><label>產地：</label></th>
 						<td>
 							<select id="place" name="place">
 								<option value="">=== 請選擇 ===</option>
@@ -87,27 +90,27 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label>酒精濃度：</label></td>
+						<th><label>酒精濃度：</label></th>
 						<td>
 							<input type="number" id="percent" name="percent" max=100 min=0 value="${empty wineList[0].percent ? 0 : wineList[0].percent}">
 						</td>
-						<td><label>容量：</label></td>
+						<th><label>容量：</label></th>
 						<td>
 							<input type="number" id="ml" name="ml" max=1000 min=0 value="${empty wineList[0].ml ? 0 : wineList[0].ml}">
 						</td>
 					</tr>
 					<tr>
-						<td><label>銷售單位：</label></td>
+						<th><label>銷售單位：</label></th>
 						<td>
 							<input type="text" id="unit" name="unit" size="5" value="${empty wineList[0].unit ? '' : wineList[0].unit}">
 						</td>
-						<td><label>價格：</label></td>
+						<th><label>價格：</label></th>
 						<td>
 							<input type="number" id="price" name="price" max=999999999 min=0 value="${empty wineList[0].price ? 0 : wineList[0].price}">
 						</td>
 					</tr>
 					<tr>
-						<td><label>商品狀態：</label></td>
+						<th><label>商品狀態：</label></th>
 						<td colspan="3">
 							<select id="status" name="status">
 								<option value="">=== 請選擇 ===</option>
@@ -119,9 +122,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label>特色：</label></td>
+						<th><label>特色：</label></th>
 						<td colspan="3">
-							<textarea rows="5" cols="60" id="feature" name="feature">123${empty wineList[0].feature ? '' : wineList[0].feature}</textarea>
+							<textarea rows="5" cols="60" id="feature" name="feature">${empty wineList[0].feature ? '' : wineList[0].feature}</textarea>
 						</td>
 					</tr>
 				</table>

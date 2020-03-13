@@ -33,46 +33,48 @@
 			<form id="form" action="../../WineServlet" enctype="multipart/form-data" method="post">
 				<table class="contentTable">
 					<tr>
-						<td colspan="2"><div><img src="../../${wineList[0].imgPath }" width="50px"></div></td>
-						<td><label>商品編號：</label></td>
-						<td><span>${wineList[0].id}</span></td>
+						<td rowspan=10><img src="../../${wineList[0].imgPath }" width="300px"></td>
 					</tr>
 					<tr>
-						<td><label>英文名稱：</label></td>
+						<th><label>商品編號：</label></th>
+						<td colspan="3"><span>${wineList[0].id}</span></td>
+					</tr>
+					<tr>
+						<th><label>英文名稱：</label></th>
 						<td colspan="3">${wineList[0].enName}</td>
 					</tr>
 					<tr>
-						<td><label>中文名稱：</label></td>
+						<th><label>中文名稱：</label></th>
 						<td colspan="3">${wineList[0].chName}</td>
 					</tr>
 					<tr>
-						<td><label>品種：</label></td>
+						<th><label>品種：</label></th>
 						<td colspan="3">${wineList[0].grape}</td>
 					</tr>
 					<tr>
-						<td><label>酒種：</label></td>
+						<th><label>酒種：</label></th>
 						<td>${wineList[0].type}</td>
-						<td><label>產地：</label></td>
+						<th><label>產地：</label></th>
 						<td>${wineList[0].place}</td>
 					</tr>
 					<tr>
-						<td><label>酒精濃度：</label></td>
+						<th><label>酒精濃度：</label></th>
 						<td>${wineList[0].percent}</td>
-						<td><label>容量：</label></td>
+						<th><label>容量：</label></th>
 						<td>${wineList[0].ml}</td>
 					</tr>
 					<tr>
-						<td><label>銷售單位：</label></td>
+						<th><label>銷售單位：</label></th>
 						<td>${wineList[0].unit}</td>
-						<td><label>價格：</label></td>
+						<th><label>價格：</label></th>
 						<td>${wineList[0].price}</td>
 					</tr>
 					<tr>
-						<td><label>商品狀態：</label></td>
+						<th><label>商品狀態：</label></th>
 						<td colspan="3">${wineList[0].status}</td>
 					</tr>
 					<tr>
-						<td><label>特色：</label></td>
+						<th><label>特色：</label></th>
 						<td colspan="3">${wineList[0].feature}</td>
 					</tr>
 				</table>
